@@ -1,0 +1,121 @@
+# Instructions
+
+## Project Instructions
+
+### Step 1: Draft Your Agent Workflow
+
+Begin by drafting a diagram illustrating the interactions and data flows between
+ the agents in your multi-agent system. Your diagram should demonstrate the
+ sequence of operations for handling customer inquiries, inventory management,
+ quote generation, and order fulfillment. Some recommended agents for your
+ multi-agent system are as follows:
+
+- An orchestrator agent for handling customer inquiries and delegating tasks to
+ different agents
+- Answer inventory queries accurately, including deciding when to reorder supplies
+- Generate quotes efficiently, applying bulk discounts strategically to
+ encourage sales
+- Finalize sales transactions, considering inventory levels and delivery timelines
+These agents should also have access to tools that allow them to interact with
+ the system database and the outside world. Some recommended tools that might
+ help you flesh out your system are:
+
+- A tool that checks inventory for different paper types
+- A tool that gets quote history related to a customer's request
+- A tool that checks the timeline for delivery of an item from the supplier
+- A tool that fulfills orders by updating the system database
+- A tool that checks the company’s current cash balance
+- A tool that generates global financial and inventory reports
+Note that these recommendations for agents and tools are only recommendations.
+ You may want to design the architecture of your multi-agent system differently.
+ To understand more about the context of this project, you may want to do some
+ reading on inventory and sales management in companies selling physical products.
+
+Count your agents carefully. The total number of agents (Orchestrator + all
+specialized Worker agents) can be maximum of five.
+
+You can use diagramming tools like Diagrams.net or Mermaid to create your diagrams.
+
+### Step 2: Review the Starter Code
+
+Carefully examine the provided starter code (`project_starter.py`) in your
+workspace. This code includes essential functionalities such as:
+
+- Initializing and managing an SQLite database
+- Managing inventory stock levels
+- Generating and tracking financial transactions
+- Utility functions to estimate supplier delivery dates and current cash balance
+At the bottom of the project_starter.py file, you'll find a provided code stub
+ designed to help you evaluate your agent implementation. You can use this stub
+ to test and refine your system effectively.
+
+Spend at least 30 minutes reviewing the starter file. Write brief descriptions
+ for each function provided to ensure you thoroughly understand their purpose
+  and usage within your system. Your multi-agent system must utilize every
+   single helper function provided in the starter code. When you update your
+    tool draft, ensure that get_all_inventory, get_cash_balance, and
+     generate_financial_report are assigned to an agent, even if they are only
+      used for internal reporting or health checks before fulfilling large orders.
+
+Once you complete your review, revisit your agent flow draft from Step 1.
+ Update the tools you initially outlined, replacing hypothetical tools with
+  tools defined using the helper functions provided in the starter code based
+   on your newfound understanding.
+
+### Step 3: Select Your Agent Framework
+
+Decide on the agent orchestration framework you will use for this project. Your
+ options include:
+
+`smolagents`: Link to documentation(opens in a new tab)
+`pydantic-ai`: Link to documentation(opens in a new tab)
+`npcsh`: Link to documentation(opens in a new tab)
+Make sure you are comfortable with your chosen framework and that it aligns well
+ with the requirements and your intended agent interactions.
+
+### Step 4: Implement Your System
+
+Using the framework you have selected, implement the agents based on the updated
+ flow you refined in Step 2. Ensure your system follows the agent workflow
+  diagram you drafted in step 1. Feel free to update the diagram based on
+   changes to your approach if any hiccups arise during the implementation.
+
+You can get started by creating different agents which accomplish each of these
+ tasks and an orchestration agent that orchestrates the flow of control and
+  data between the different agents. Use the helper functions provided in the
+   starter file to aid the definition of tools for the different worker agents.
+    Additionally, refer to the project rubric to thoroughly understand the
+     requirements and criteria for successful completion of your system.
+
+### Step 5: Test and Evaluate Your implementation
+
+Test your multi-agent system thoroughly using the provided dataset
+ (`quote_requests_sample.csv`). Ensure:
+
+- Your agents correctly handle various customer inquiries and orders
+- Orders are accommodated effectively to optimize inventory use and profitability
+- The quoting agent consistently provides competitive and attractive pricing
+- Your agents can recognize impossible constraints. To pass this project, your
+ system must successfully fulfill at least three orders, but it MUST also
+ actively reject or leave unfulfilled at least one order (e.g., due to
+ insufficient stock or impossible supplier delivery timelines) with a clear
+ reason provided to the customer.
+Refer to the project rubric at the end of this step to evaluate the results
+ documented in the `test_results.csv` file.
+
+### Step 6: Reflect and Document
+
+After evaluating your system, prepare a clear and concise report detailing:
+
+- A comprehensive explanation of your multi-agent system
+- Evaluation results (`test_results.csv`  generated by the evaluation code)
+ highlighting strengths and areas for improvement
+- At least two distinct suggestions for further improvements to the system.
+Your final submission should include:
+
+- Your updated agent flow diagram
+- Your completed implementation script
+- Your reflective report with evaluations
+Ensure that you check the project rubric to understand the requirements from the
+ different parts of the project before submitting it. You submission will be
+ reviewed against the project rubric.
