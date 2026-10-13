@@ -1,175 +1,357 @@
-Business Advisor report - run started 2026-10-11 15:58
+﻿Business Advisor report - run started 2026-10-12 21:00
 
 === Request dated 2025-04-01 ===
-Summary: Sale of $81.30 on 2025-04-01 increased cash to $45,141, inventory value $4,875.30, total assets $50,016.30; no low or out-of-stock items.
+Summary (2025-04-01): Cash rose $81.30 (from $45,059.70 to $45,141.00); inventory value $4,875.30; no items below min or out of stock; this order generated $81.30 from 400 units (Glossy 200, Cardstock 100, Colored 100).
 
 Recommendations:
-- Raise min stock level for Glossy paper and Cardstock slightly (e.g., +50 units each) to avoid last-minute rush orders for ceremonies.
-- Introduce a small bulk-discount tier starting at 500 units (1–2% off) to encourage larger orders and reduce per-order handling costs.
-- Bundle colored paper with cardstock as a ceremony pack at a modest premium to increase average order value.
-- Continue same-day/quick-delivery upsell (chargeable) for urgent events to monetize demand for faster delivery.
+- Keep current stock levels for these lines (no below-min or OOS) but monitor Glossy paper closely — it accounted for 200 units in this order and is a top seller.
+- Raise min_stock_level for Glossy paper modestly (e.g., +25–50 units) to avoid future rush reorders for ceremonies.
+- Introduce a 3-tier ceremony discount for repeat/large event orders (e.g., 2–499 units 0%, 500–2,499 units 3%, 2,500+ units 6%) to encourage larger baskets.
+- Add a branded cardstock bundle (mix of heavy white + 50 colored sheets) as a SKU — current lost-demand log is empty, so recommendations on range are driven by observed request counts (200/100/100).
+
+(Internal note: customer asked delivery by Apr 15; confirmed earlier deliveries are Apr 2–5.)
 
 === Request dated 2025-04-03 ===
-Review summary (2025-04-03): Cash $45,141; inventory $4,875; total assets $50,016; top sellers: Glossy paper, Cardstock, Colored paper. Recommendations:
-- Add “Poster paper” and basic party items (balloons, streamers) to the catalog or establish vetted suppliers with lead-times; recent request shows missed revenue opportunity. 
-- Raise min-stock/reorder levels for Colored paper and Cardstock (top sellers) to avoid substitution requests; target safety stock to cover at least 2 weeks of sales. 
-- Stock crepe/banner rolls and large poster sizes as standard substitutions and create a pre-approved substitution list to speed customer confirmations. 
-- Offer a paid expedited procurement option for out-of-catalog items and display expected delivery windows at point-of-quote to reduce lost sales.
+Summary (2025-04-03): Cash $45,141 (no change from 2025-04-02), inventory value $4,875.30, total assets $50,016.30; no SKUs below min or out of stock. Lost-demand: 500 poster paper (not_stocked), 300 streamers (not_stocked), 200 balloons (not_in_catalog).
+
+Recommendations:
+- Add “Colorful poster paper” to catalog and set initial min stock to cover events (suggest 1,000 units) — cites 500 lost units on 2025-04-03.
+- Add “Party streamers” as a stocked SKU with a reorder point reflecting event seasonality (suggest min 600) — cites 300 lost units.
+- Introduce balloons to catalog (small SKU, low inventory cost) and offer event bundles (balloons+streamers+poster) to capture parade orders — cites 200 lost units.
+- Track lost-demand entries weekly and create an event products promotion to convert repeat missed requests into sales.
 
 === Request dated 2025-04-04 ===
-Summary (2025-04-04): Cash $45,174.85 (+$33.85 vs 2025-04-03); inventory $4,868.45; total assets $50,043.30. A4 paper sale (10,000 sheets) produced $527 and delivery set for 2025-04-11. No items flagged below min or out of stock.
+Summary: Cash rose $33.85 to $45,174.85 on 2025-04-04; inventory value $4,868.45; A4 sales dominated (10,000 units, $527). Lost demand: A3 — 5,000 units; printer paper — 500 units (both “not_in_catalog”).
 
 Recommendations:
-- Add exact A3-sheet and printer-ream SKUs to the catalog (or map recommended equivalents) so similar requests can be fulfilled immediately.
-- Create a fast-sourcing workflow for conference orders (expedite lead times + provisional holds) to avoid missed lines.
-- Raise the reorder threshold for A4 paper given high single-order volume and consider a tiered discount for large reams/bulk to increase revenue.
-- Offer a suggested-substitute email/phone template to sales so catalog-mismatch lines are captured and converted on first contact.
+- Add A3 paper and standard printer paper to the catalog (lost demand: A3 5,000 units; printer paper 500 units) and secure suppliers to capture this immediate demand.
+- Raise A4 reorder/minimum levels (top seller, 10,000-unit order) to avoid future stock pressure and enable guaranteed conference fulfilment.
+- Introduce tiered bulk discounts or prebook allocations for conference customers to lock revenue and smooth fulfillment.
+- Monitor cash-to-inventory ratio and keep a small safety buffer (inventory value <$5k) while prioritizing fast-moving SKUs for replenishment.
 
 === Request dated 2025-04-05 ===
-Summary: Cash rose $74.05 to $45,248.90 on 2025-04-05; inventory value $4,816.40; total assets $50,065.30. A4 paper is the top seller (10,250 units), cardstock showing steady demand (600 units); no SKUs below min or out of stock. Recommendations:
-- Offer a targeted bundle/upsell to this customer (add 250 more sheets) to hit the 1,000-unit 5% discount—boosts revenue and customer value. 
-- Raise reorder level for A4 paper (current velocity shows very high turnover) to avoid future stockouts and lost sales. 
-- Increase min_stock or reorder frequency for Cardstock (steady demand) and expand popular color range to capture more reception/event orders. 
-- Consider lowering the bulk discount threshold or adding a tier at 500 units to convert mid-size orders into higher-margin sales.
+Summary (2025-04-05): Cash rose $74.05 to $45,248.90; inventory value $4,816.40; top sellers — A4 paper 10,250 units (revenue $542.50), Cardstock 600 units (revenue $112.80); no lost-demand recorded.
+
+Recommendations:
+- Promote a mixed-order bulk tier (e.g., 5% at 750–999 units) to convert orders like this one (750 units total) into higher-margin buys.
+- Raise Cardstock reorder level to 800 units (sales 600 units) to avoid stockouts when large single orders arrive and to keep a 25–30% safety cushion.
+- Maintain higher safety stock for A4 paper (top seller: 10,250 units) and prioritize fast replenishment; consider vendor consignment or automatic reorder for A4.
+- Add a highlighted “recycled high-quality cardstock” product page and small-color-pack SKUs (e.g., 100-sheet color packs) — low lost-demand logging means capture is likely available.
 
 === Request dated 2025-04-05 ===
-Summary: Cash rose $147.95 to $45,322.80 on 2025-04-05; inventory value $4,766.40, total assets $50,089.20; no SKUs below min or OOS noted. Recommendations:
-- Confirm exact cardstock color breakdown with the customer and ship as confirmed to meet the 2025-04-15 deadline.
-- Offer to source washi tape externally with a 10–15% sourcing fee or add it to catalog—customer demand suggests adding it to inventory.
-- Raise reorder level for Cardstock (top seller: 900 units YTD) to avoid future stock risk.
-- Create a promotional bundle or tiered discount to push orders toward the 1,000-unit threshold and capture bulk-discount revenue.
+Summary (2025-04-05): Cash rose $147.95 to $45,322.80; inventory value $4,766.40; total assets $50,089.20. Recommendations:
+- Stock decorative washi tape: 200-unit lost demand on 2025-04-05 (reason: not_stocked) — add as a SKU or arrange a drop-ship partner to capture immediate recurring party demand.
+- Raise reorder threshold for Cardstock: Cardstock sold 900 units (top-seller) — increase min_stock to prevent stockouts during spikes and consider a safety buffer of 20%.
+- Increase reorder frequency for Colored paper: 600 units sold recently — shorten reorder cadence or add a small bulk tier (e.g., 1,000-unit 5% discount) to push larger, revenue-stable orders.
+- Offer targeted bundle/party packs (colored paper + cardstock + optional tape via partner) to upsell and convert lost washi-tape demand.
+All recommendations based on the 200-unit lost-demand entry and top-seller counts.
 
 === Request dated 2025-04-06 ===
-One-line summary: As of 2025-04-06 cash rose $7.60 to $45,330.40; inventory value $4,766.40; top sellers A4 (10,250 units), Cardstock (1,100 units); no items below min or out of stock.
-
-Recommendations:
-- Add white printer paper and colorful construction paper to the catalog (or create a prioritized special-order SKU) — colored paper already shows demand (600 units historically).
-- Raise reorder thresholds for A4 paper and Cardstock (e.g., increase min_stock_level ~20% or set reorder to cover 3–4 weeks of sales) to avoid future stock pressure.
-- Introduce tiered bulk discounts (e.g., 5% at 500+, 10% at 1,000+) and add a 5% band at 500 for Cardstock to convert mid-size requests.
-- Offer a pre-approved fast special-order process and clearly listed stocked alternatives when items are unavailable to capture otherwise-lost sales.
+Summary: Cash rose $7.60 to $45,330.40 (cash balance $45,330.4), inventory value $4,766.40; Cardstock is a top seller (1,100 units sold) and we fulfilled 200 units this request. Recommendations:
+- Add “colorful construction paper” to catalog and stock an initial 500 units (matches lost demand: 500 units, reason not_stocked).
+- Add white printer paper SKU and stock 300 units (lost demand: 300 units, reason not_in_catalog) to avoid repeat lost sales.
+- Raise Cardstock reorder level / min_stock (sales 1,100 units) so fast-moving colors don’t stock out; consider safety stock for 200–500 units.
+- Introduce a mid-tier bulk discount at 500 units (e.g., 3–5%) to convert medium orders and increase revenue.
 
 === Request dated 2025-04-07 ===
-2025-04-07 snapshot: Cash $45,759.12 (+$428.72 vs 2025-04-06), inventory $4,418.40, total assets $50,177.52; no low or out-of-stock SKUs; top sellers: A4 paper, large poster paper, cardstock, glossy.
+Summary (2025-04-07): Cash rose $428.72 to $45,759.12; inventory value $4,418.40; total assets $50,177.52. Top sellers: A4 paper (10,250 units demanded), poster paper 300 units, cardstock 1,300 units. Lost demand: 1,000 units of matte A3 (not in catalog).
 
 Recommendations:
-- Add a stocked matte-A3 alternative or approved supplier partner immediately (customer order lost this time).
-- Raise reorder/minimum stock for top-selling A4/poster/cardstock to avoid future missed sales (set safety stock to cover 2–3 weeks of sales).
-- Introduce a tiered bulk-discount for orders >1,000 units (or fast-ship premium) to capture large exhibition orders and increase revenue.
-- Create a quick-reorder bundle for exhibition packs (glossy, poster, cardstock) to speed quoting and fulfillment.
+- Add matte A3 paper to the catalog or source a certified substitute (lost demand = 1,000 units) and set initial min_stock = 1,000 to capture this demand.
+- Introduce a 2-tier bulk discount (5% at 500–999 units, 7–10% at ≥1,000) to convert large requests like this and increase average order value.
+- Raise reorder thresholds for A4 and cardstock given high cumulative demand (A4: 10,250 units sold; cardstock: 1,300) to avoid stockouts during exhibitions.
+- Offer a “pre-order for exhibition” service with guaranteed delivery windows (paid expedite) to lock sales and reduce last-minute fulfillment risk.
 
 === Request dated 2025-04-07 ===
-Summary (2025-04-07): cash +$453.72 to $45,784.12; inventory value $4,418.40; top sellers include A4 paper (10,250 units) and Glossy paper (1,200 units); only the 500-sheet glossy line was sold to the customer, other requested items were out of catalog.
+Summary (2025-04-07): Cash up $453.72 to $45,784.12; inventory value $4,418.40; top sellers include A4 paper (10,250 units) and Glossy paper (1,200 units).
 
 Recommendations:
-- Add A4 matte, A5 colored, and A4 recycled SKUs (or clear mapped substitutes) to capture lost orders like this ceremony request.
-- Introduce a bulk-discount tier at 1,000+ sheets (e.g., 10–15% off) to convert larger orders; re-quote the customer for 1,000+ to win the sale.
-- Raise reorder points for Glossy paper and A4 paper based on high turnover (top sellers) to avoid stockouts and speed fulfillment.
-- Offer curated substitute bundles and guaranteed expedited delivery options (with a fee) for time-sensitive requests to preserve revenue on tight lead-times.
+- Add A4 matte to catalog and stock immediately — lost demand: 1,000 units (reason: not_stocked).
+- Add A5 colored paper SKU (or a compatible substitute) to capture 2,000-unit demand (reason: not_in_catalog).
+- Start stocking A4 recycled paper with a higher reorder level (lost demand: 3,000 units); set min_stock to cover 4 weeks of demand and consider supplier lead-time safety stock.
+- Promote bundled/bulk discounts for glossy and A4 paper (top sellers) to increase average order size and recover margin; consider offering a 5% discount at 1,000-unit threshold.
+
+These changes target the 6,000 units of lost demand and leverage strong cash position to fund initial stocking.
 
 === Request dated 2025-04-07 ===
-Summary (2025-04-07): Cash rose $453.72 to $45,784.12; inventory value $4,418.40; no items currently below min or out of stock; A4 is top seller but was unavailable for this request. Recommendations:
-- Add A3 glossy paper and kraft envelopes to the catalog (or identify reliable suppliers) to capture lost requests.
-- Increase reorder level / safety stock for A4 paper and set an express reorder path for high-demand line items.
-- Create a documented set of close-equivalent alternatives (e.g., A4 glossy variants, envelope substitutes) to offer immediately when exact items are unavailable.
-- Introduce a short lead-time premium shipping option or supplier prioritization for urgent customer-delivery requests to reduce late-fulfillment incidents.
+One-line summary: Cash rose $453.72 to $45,784.12 on 2025-04-07; inventory value $4,418.40, no items below min or out of stock.
+Recommendations:
+- Raise A4 paper reorder level and expedite next replenishment (lost demand: A4 paper 200 units, reason: cannot_supply_in_time; A4 is top seller with 10,250 units).
+- Add A3 glossy size to the catalog (lost demand: A3 glossy 100 units; glossy paper category sells well — 1,200 units).
+- Add 100% recycled kraft envelopes to stocked range and set a small safety stock (lost demand: envelopes 50 units, reason: not_stocked).
+- Offer a short-term expedited delivery fee or lead-time calendar to capture urgent orders and reduce lost-demand costs.
 
 === Request dated 2025-04-08 ===
-2025-04-08 summary: Cash $45,784.12 (no change vs 2025-04-07), inventory value $4,418.40, total assets $50,202.52; A4 paper and cardstock are among top sellers; no SKUs below min or out of stock on 2025-04-08. Recommendations:
-- Raise reorder points/minimums for A4 paper and cardstock (top sellers) to prevent short-notice fulfillment failures. 
-- Create a 1–2‑week safety stock buffer for event-driven items and flag orders with <72‑hour lead time for priority handling. 
-- Negotiate an express restock/courier option or local supplier backup for same-week deliveries to avoid losing sales. 
-- Introduce a small-volume event bundle (A4 + cardstock) with a clear express-fee option to capture last-minute demand.
-
-=== Request dated 2025-04-08 ===
-2025-04-08 review: cash +$7.60 (to $45,791.72), inventory value $4,418.40, total assets $50,210.12; no items below min or out-of-stock; top sellers include A4 paper and Cardstock (1,500 units).
+Summary: Cash unchanged at $45,784.12 (no change day-over-day); inventory value $4,418.40; top sellers include A4 paper (10,250 units sold) and Cardstock (1,300 units).
 
 Recommendations:
-- Add standard copy paper and paper napkins to the catalog or establish a vetted supplier partner for disposable items to capture these lost sales.
-- Offer the customer an upsell: increase cardstock to 1,000+ units to qualify for bulk discounts (discounts start at 1,000 units) and improve margin.
-- Raise reorder thresholds for Cardstock (currently strong seller, 1,500 units sold historically) to avoid future stockouts and reduce rush orders.
-- Introduce a “party pack” bundle (substitute paper types + napkins) with a small tiered discount to increase average order value and repeat business.
+- Raise min-stock/reorder levels for A4 paper and Cardstock: lost demand shows 500 A4 and 200 Cardstock units on 2025-04-08 (reason: cannot_supply_in_time) — increase safety stock to cover at least 7 days of demand for A4. 
+- Create an express-restock or vendor expedited lane for high-turn SKUs (A4 paper) to meet tight delivery dates. 
+- Offer small bulk pre-order or discount tiers and collect deposits for event-driven orders to prioritize fulfillment and reduce unfillable requests.
 
 === Request dated 2025-04-08 ===
-Summary: Cash $45,828.12 (+$44 vs 2025-04-07), inventory value $4,418.40, total assets $50,246.52; top sellers include Glossy paper (1,700 units) and Cardstock (1,800 units); no SKUs below min or out of stock.
+Summary (2025-04-08): Cash up $7.60 to $45,791.72, inventory $4,418.40, total assets $50,210.12; Cardstock is a top seller (1,500 units sold).
 
 Recommendations:
-- Offer the customer a targeted upsell: suggest increasing order to 1,000 units (or add complementary items) to unlock the bulk discount—expected to improve margin and AOV.
-- Raise reorder points for Glossy paper and Cardstock (high turnover) to avoid stockouts during events; consider safety stock + review lead times.
-- Introduce a small bundle/volume discount for mixed 1,000+ orders to convert similar large requests.
-- Monitor daily cash flow and keep a $20k+ operational cash buffer; the small $44 increase is fine but seasonality could tighten liquidity.
+- Add Standard copy paper to catalog: lost demand 500 units on 2025-04-08 — likely recurring; estimated quick revenue lift from conversions.
+- Add Paper napkins to catalog or partner with a supplier: 100 units lost demand on 2025-04-08; low SKU complexity, high conversion probability for party orders.
+- Introduce a small-order bundle discount or cross-sell (e.g., cardstock + printer paper bundle) to upsell customers and capture lost multi-item orders.
+- Raise min_stock_level for Cardstock modestly (top seller, 1,500 units sold) to avoid future missed sales.
 
 === Request dated 2025-04-08 ===
-Summary: As of 2025-04-08 cash $45,853.12 (+$69 vs 2025-04-07), inventory value $4,418.40, and top sellers are Glossy paper and A4 paper (Glossy: 2,200 units). Recommendations:
-- Add A4 matte/photo matte SKUs immediately and map to existing A4 catalog items so incoming requests (300 sheets) can be fulfilled quickly. 
-- Raise reorder level for Glossy paper (top seller) and A4 paper to avoid stockouts during exhibitions; consider safety stock to cover large bulk requests. 
-- Introduce a lower bulk-discount tier (e.g., from 1,000 to 500 units) for event/exhibition buyers to capture mid-size orders like this one. 
-- Run quick targeted promo or bundle (Glossy + A4 alternatives) to convert lost matte-paper sales; fund from available cash cushion.
+Summary: Cash rose $44 to $45,828.12 on 2025-04-08; inventory value $4,418.40; total assets $50,246.52. Top sellers include Cardstock (1,800 units) and Glossy paper (1,700 units). Lost-demand log: none.
+
+Recommendations:
+- Add a mid-tier bulk discount (e.g., 5% at 800–999 units) — this order (800 units total) would have converted to a discounted sale and increases revenue capture.
+- Raise reorder points for Glossy paper and Cardstock (both ~1,700–1,800 units sold YTD) to avoid stock risk and reduce last-minute express shipping.
+- Introduce a bundled promo (Glossy + Cardstock) for show/event buyers to increase average order size and repeat purchases.
+- Monitor and keep min_stock levels tight (no current below-min or OOS items, but inventory value is $4.4k) and re-evaluate monthly against top-seller velocity.
+
+=== Request dated 2025-04-08 ===
+Summary: Cash rose $44 to $45,828.12 on 2025-04-08; inventory value $4,418.40; top sellers include A4 paper (10,250 units) and Glossy paper (1,700 units).
+
+Recommendations:
+- Add A3 glossy to the catalog (lost demand: 500 units, reason not_in_catalog) — Glossy paper is already a top seller (1,700 units), so listing A3 glossy can capture immediate revenue.
+- Stock A4 matte (lost demand: 300 units, reason not_stocked) and set a higher reorder level for A4-format variants — A4 paper sells heavily (10,250 units), indicating variant demand.
+- Raise reorder points for A4-format paper and Glossy variants to avoid lost sales; consider a small volume discount tier for orders ≥250 sheets to encourage larger purchases.
+
+Lost-demand log cited: 500 A3 glossy (not_in_catalog); 300 A4 matte (not_stocked).
 
 === Request dated 2025-04-09 ===
-Summary (2025-04-09): Cash $45,872.12 (+$19 vs 4/8), inventory value $4,418.40, A4 paper is a top seller but was unavailable for this customer’s requested date; poster paper not stocked; only 500 cardstock sold ($94 charged).
-Recommendations:
-- Add poster paper SKUs (or vetted color substitutes) to the catalog and fast-track initial small MOQ to capture similar orders.
-- Raise A4 safety stock / reorder point (A4 is a top seller with 10,250 units sold) to prevent post-request availability slips and lost sales.
-- Offer an expedited-purchase fee or supplier expedited agreement for large A4 orders to meet urgent delivery dates (approve when margin covers cost).
-- Introduce a targeted bulk discount at 1,000+ units (or a tiered discount) and proactively quote customers the revised price to convert larger orders.
+One-line summary: Cash rose $19 to $45,847.12 on 2025-04-09; inventory $4,418.40, total assets $50,265.52; top seller A4 (10,250 units historically), Cardstock strong (2,300 units). Recommendations:
+
+- Raise A4 reorder level and expedite purchasing to avoid missed orders (lost demand: 5,000 sheets on 2025-04-09) — target safety stock to cover at least one large order (5,000 units).
+- Add poster paper SKUs (various colors) to catalogue or establish a vetted supplier arrangement — lost demand: 2,000 sheets on 2025-04-09.
+- Increase Cardstock bulk-discount promotion threshold outreach (current demand 500 order, historical 2,300 units) to push orders above 1,000 to capture 5%+ discount and larger volume.
+- Review lead times and flag upcoming event dates to prioritize production runs for high-demand SKUs (A4, Cardstock).
 
 === Request dated 2025-04-12 ===
-2025-04-12 snapshot: cash $45,872.12, inventory $4,418.40, total assets $50,290.52; cash unchanged vs prior day; no SKUs below min or out of stock. Recommendations:
-- Increase safety stock and reorder points for A3 colored paper and cardstock (lead-time shortfall caused missed delivery). Base new min on demand multiples of current top-sellers (A4 sells 10,250 units).
-- Offer a tiered expedited-fee option and partial-fulfilment policy so urgent customers get immediate A4/available items while remaining lines follow normal lead time.
-- Negotiate faster supplier/outsourced cutting runs for cardstock and colored A3 or pre-buy small strategic lots to meet demo/seasonal spikes.
-- Add a visible “next-available delivery” ETA and bulk-discount tiers for orders >2,000 sheets to convert missed-deadline requests into committed sales.
+Summary: Cash unchanged at $45,847.12 on 2025-04-12; inventory value $4,418.40; A4 paper is a top seller (10,250 units sold).
+
+Recommendations:
+- Raise reorder level for A4 paper (10,250 units sold YTD) and place emergency replenishment to avoid the 10,000-unit lost demand (reason: cannot_supply_in_time).
+- Add A3 colored paper to the catalog (lost demand: 5,000 units, reason: not_in_catalog) as a new SKUs or a made-to-order offering with clear lead time.
+- Increase Cardstock safety stock / accelerate supplier lead times (lost demand: 500 units) or offer customers a prioritized partial fulfillment/backorder option for signage orders.
+
+Rationale: each recommendation directly addresses the structured lost-demand counts and top-selling numbers to improve revenue and reduce lost sales.
 
 === Request dated 2025-04-13 ===
-Internal review (2025-04-13): Cash $45,872.12, inventory $4,418.40, total assets $50,290.52; no SKUs below min or out of stock; cash unchanged vs 2025-04-12.
+Summary: Cash $45,847.12, inventory value $4,418.40, total assets $50,265.52; A4 paper is a top seller (10,250 units), no SKUs below min or out of stock, cash unchanged vs prior day.
 
 Recommendations:
-- Increase reorder level for A4 paper (top seller: 10,250 units moved historically) to prevent missed same-day requests; shorten supplier lead time or keep safety stock covering at least 2–3 days of peak demand.
-- Add colorful construction paper and poster board to the catalog (or identify reliable suppliers) — low-cost SKUs that fill gaps and reduce lost sales from “not in catalog” responses.
-- Implement an expedited-restock or partial-fulfillment policy (chargeable rush) and an automatic alert for high-demand SKUs when incoming orders exceed forecasted availability.
-- Review min_stock settings vs historical sell-through for large-format and specialty papers; raise min levels where turnover is high to avoid future deadline failures.
+- Raise A4 paper reorder/safety stock (500 units lost demand + 10,250 units recent sales) to avoid time-sensitive stockouts.
+- Add colorful construction paper to the catalog and set initial min stock ≈200 units (lost demand 200) to capture recurring school/event requests.
+- Introduce poster board (100-unit lost request) as a new SKU or partner-sourced item with expedited reorder option for event deadlines.
+- Implement a same-week backorder/expedite workflow and an automated customer notice for time-sensitive requests to recover lost revenue.
 
 === Request dated 2025-04-14 ===
-Review date 2025-04-14 — Summary: cash fell $50 to $45,822.12; inventory value $4,468.40; total assets $50,290.52. Top seller is A4 paper (10,250 units sold), showing strong demand.
+Internal end-of-run review (2025-04-14): cash unchanged at $45,847.12, inventory value $4,418.40, total assets $50,265.52; A4 paper is top-seller (10,250 units). Recommendations:
+
+- Increase A4 paper emergency reorder frequency and raise min_stock_level for A4 paper (lost demand: 1,000 units “cannot_supply_in_time”).
+- Add A3 colored paper to catalog as an assortable SKU (lost demand: 500 units “not_in_catalog”) and test a small launch bundle.
+- Stock napkins and biodegradable cups (Paper napkins: 2,000 units not_stocked; Paper cups: 1,000 units not_stocked) with modest safety stock for event customers.
+- For paper plates, tighten lead times or offer an express-fee option (500 units “cannot_deliver_by_deadline”) to convert urgent orders.
+
+These actions are driven by the lost-demand log counts above and current healthy stock levels (no items below min level).
+
+=== Request dated 2025-04-14 ===
+Summary (2025-04-14): Cash $45,847.12, inventory $4,418.40, total assets $50,265.52; cash unchanged vs 2025-04-13; top seller Cardstock (2,300 units).
 
 Recommendations:
-- Raise reorder level for A4 paper and create an emergency buffer (based on high A4 sales) to avoid shortfalls for near-term large orders.
-- Add A3 colored paper and biodegradable cups/napkins to the catalog (customer demand shown by request; no current stock) and source one or two reliable suppliers.
-- For perishable or event-driven items (plates/cups), offer expedited shipping or set a minimum lead time on quotes; consider holding a small event-ready stock to meet tight deadlines.
-- When unavailable, proactively offer earliest guaranteed delivery date (e.g., Apr 18) plus suggested substitutes and pricing to capture lost sales.
-
-=== Request dated 2025-04-14 ===
-Summary: Cash fell $50 to $45,822.12 on 2025-04-14; inventory value $4,468.40; top sellers include A4 and Cardstock, and current inventory shows no items below minimum or out of stock. Recommendations:
-
-- Add the missing “standard copy paper” SKU to the catalog and map common substitutes so sales reps can immediately propose alternatives.
-- Create an event/expedited stock buffer (hold small local safety stock) and a guaranteed next-day option for ceremony/urgent orders to avoid last-minute unavailability.
-- Raise reorder/place larger safety batches for colored paper and high-turn items (Cardstock, A4) based on top-sellers data to reduce stockouts on short lead times.
-- Offer a clear customer-facing lead-time calendar and an automated option at checkout to schedule delivery on/after 2025-04-18 to capture deferred sales.
+- Add “Standard copy paper” to our stocked range (lost demand 1,000 units, reason: not_stocked) to capture recurring requests.
+- Raise reorder/safety stock and shorten lead-time for Cardstock (lost demand 500 units, cannot_supply_in_time); increase min_stock and expedite replenishment.
+- Increase reorder frequency or safety stock for Colored paper (lost demand 200 units, cannot_supply_in_time) and offer limited assorted-color bundles.
+- Add a short-leadtime/preorder flag and small express fee for urgent ceremony requests to convert near-term lost demand.
 
 === Request dated 2025-04-15 ===
-2025-04-15 summary: Cash rose $28.60 to $45,850.72; inventory value $4,468.40; total assets $50,319.12. Top sellers: Cardstock leads sales.
-
+Summary: Cash rose $28.60 to $45,875.72 on 2025-04-15; inventory value $4,418.40; top sellers—Cardstock (3,300u, $609.12), A4 paper (10,250u), Glossy paper (1,700u). Lost demand: 2,000 A4 glossy (cannot supply in time) and 1,500 A3 matte (not in catalog).
 Recommendations:
-- Increase reorder level for Cardstock (top seller) to avoid stockouts during event-driven spikes; raise min_stock by ~20% based on 1,000+ unit orders.
-- Add a glossy A4 substitute SKU or expand supplier options for A4 glossy (customer attempted 2,000 sheets) to capture lost sales.
-- Consider listing an A3 matte alternative (or supplier onboarding) — high unmet demand should be converted to a catalog item.
-- Offer a small expedited-order surcharge or tiered bulk discounts (e.g., 3% at 500+, 5% at 1,000+) to incentivize larger confirmed orders and improve margin/turnover.
+- Raise reorder/min-stock for Glossy paper: recent top-seller (1,700u) plus lost demand 2,000u indicates recurrent shortfall—increase safety stock and supplier lead-time buffer.
+- Add A3 matte to catalog and quote lead times/pricing for 1,500-unit demand; consider a launch promo to convert missed orders.
+- Increase Cardstock reorder level (3300 units sold historically; recent 1,000-unit order) to avoid stockouts during bulk orders and review tiered discounts to preserve margin.
+- Prioritise expedited fulfillment for date-sensitive requests (events) and flag such orders to procurement to reduce “cannot_supply_in_time” occurrences.
 
 === Request dated 2025-04-17 ===
-Summary (2025-04-17): Cash $45,850.72; inventory $4,468.40; total assets $50,319.12. Large poster paper on hand: 300 units; no items below min or out of stock; cash unchanged since 2025-04-16.
+Summary (2025-04-17): Cash $45,875.72, inventory $4,418.40, total assets $50,294.12; cash unchanged from 2025-04-16. Recommendations:
+- Add Flyers (5,000 lost) and Poster paper (2,000 lost) to catalog and carry starter stock; cite lost-demand: flyers 5,000 units, posters 2,000 units.
+- Create a Tickets product or partner print service (10,000 lost) and add a fast-turn option for event deadlines; cite lost-demand: tickets 10,000 units (not in catalog).
+- Set reorder thresholds for Large poster paper (recent sales 300 units) and Cardstock/A4 high velocity items; raise min_stock for high-turn SKUs to avoid missed event demand.
+- Offer a bulk-discount/event package (delivery guarantee by deadline) to capture large orders and increase revenue.
 
-Recommendations:
-- Offer the customer the 300 Large poster paper units immediately and quote expedited restock for the remaining 1,700 units with lead-time and cost options to try to meet 2025-05-15.
-- Ask the customer to specify flyer dimensions/weight/finish or provide a catalog SKU so we can match or arrange a special run; add common flyer SKUs to the catalog for faster quoting.
-- Add a tickets product (or partner/print-on-demand ticket service) to the catalog and create a standard lead-time/pricing tier for high-volume orders.
-- Raise reorder threshold for Large poster paper to cover at least 2,000-unit bulk orders and introduce a bulk-discount tier to win large-event business.
+=== Lost demand log 2025-04-01 to 2025-04-17 (by item and reason) ===
+[
+  {
+    "item": "A4 paper",
+    "reason": "cannot_supply_in_time",
+    "requests": 6,
+    "units": 17200
+  },
+  {
+    "item": "tickets",
+    "reason": "not_in_catalog",
+    "requests": 1,
+    "units": 10000
+  },
+  {
+    "item": "A3 colored paper (assorted colors)",
+    "reason": "not_in_catalog",
+    "requests": 2,
+    "units": 5500
+  },
+  {
+    "item": "A3 paper",
+    "reason": "not_in_catalog",
+    "requests": 1,
+    "units": 5000
+  },
+  {
+    "item": "Flyers",
+    "reason": "not_stocked",
+    "requests": 1,
+    "units": 5000
+  },
+  {
+    "item": "Poster paper",
+    "reason": "not_stocked",
+    "requests": 3,
+    "units": 4500
+  },
+  {
+    "item": "Recycled paper",
+    "reason": "not_stocked",
+    "requests": 1,
+    "units": 3000
+  },
+  {
+    "item": "Paper napkins",
+    "reason": "not_stocked",
+    "requests": 2,
+    "units": 2100
+  },
+  {
+    "item": "A5 colored paper",
+    "reason": "not_in_catalog",
+    "requests": 1,
+    "units": 2000
+  },
+  {
+    "item": "Glossy paper",
+    "reason": "cannot_supply_in_time",
+    "requests": 1,
+    "units": 2000
+  },
+  {
+    "item": "A3 matte paper",
+    "reason": "not_in_catalog",
+    "requests": 1,
+    "units": 1500
+  },
+  {
+    "item": "Standard copy paper",
+    "reason": "not_stocked",
+    "requests": 2,
+    "units": 1500
+  },
+  {
+    "item": "Matte paper",
+    "reason": "not_stocked",
+    "requests": 2,
+    "units": 1300
+  },
+  {
+    "item": "Cardstock",
+    "reason": "cannot_supply_in_time",
+    "requests": 3,
+    "units": 1200
+  },
+  {
+    "item": "Paper cups",
+    "reason": "not_stocked",
+    "requests": 1,
+    "units": 1000
+  },
+  {
+    "item": "matte A3 paper",
+    "reason": "not_in_catalog",
+    "requests": 1,
+    "units": 1000
+  },
+  {
+    "item": "Construction paper",
+    "reason": "not_stocked",
+    "requests": 2,
+    "units": 700
+  },
+  {
+    "item": "A3 glossy paper",
+    "reason": "not_in_catalog",
+    "requests": 2,
+    "units": 600
+  },
+  {
+    "item": "Paper plates",
+    "reason": "cannot_deliver_by_deadline",
+    "requests": 1,
+    "units": 500
+  },
+  {
+    "item": "printer paper",
+    "reason": "not_in_catalog",
+    "requests": 1,
+    "units": 500
+  },
+  {
+    "item": "Party streamers",
+    "reason": "not_stocked",
+    "requests": 1,
+    "units": 300
+  },
+  {
+    "item": "white printer paper",
+    "reason": "not_in_catalog",
+    "requests": 1,
+    "units": 300
+  },
+  {
+    "item": "Colored paper",
+    "reason": "cannot_supply_in_time",
+    "requests": 1,
+    "units": 200
+  },
+  {
+    "item": "Decorative adhesive tape (washi tape)",
+    "reason": "not_stocked",
+    "requests": 1,
+    "units": 200
+  },
+  {
+    "item": "balloons",
+    "reason": "not_in_catalog",
+    "requests": 1,
+    "units": 200
+  },
+  {
+    "item": "poster board",
+    "reason": "not_in_catalog",
+    "requests": 1,
+    "units": 100
+  },
+  {
+    "item": "Envelopes",
+    "reason": "not_stocked",
+    "requests": 1,
+    "units": 50
+  }
+]
 
 === End-of-run review 2025-04-01 to 2025-04-17 ===
-One-line summary: Cash rose $709.72 (from $45,141.00 to $45,850.72) on 2025-04-17; total assets $50,319.12 with inventory $4,468.40; no SKUs below min or out-of-stock; top sellers by units are A4, Cardstock, Glossy, and Large poster paper.
+Summary: Cash rose $734.72 (from $45,141.00 to $45,875.72) and total assets +$277.82 to $50,294.12; inventory value fell from $4,875.30 to $4,418.40; top sellers (by units) were Cardstock (3,300 units), A4 paper (10,250 units) and Glossy paper (1,700 units).
 
 Recommendations:
-- Raise reorder thresholds for A4 paper (highest unit demand: 10,250 units) to avoid future stock pressure and volume discounts. 
-- Reprice or bundle Cardstock and A4 (low revenue per unit) to improve margin—introduce small bulk-discount tiers to increase average order size. 
-- Promote Large poster paper via targeted upsell (higher revenue per unit) to boost revenue without large inventory changes. 
-- Use modest portion of the $709 cash improvement to fund a short digital promotion/testing budget to validate which pricing/bundle moves lift revenue.
+- Prioritise A4 paper availability: 6 lost requests totalling 17,200 units (reason: cannot_supply_in_time). Increase reorder frequency and raise min_stock for A4 to cover peak demand (suggest +8–10k units safety stock).
+- Add high-volume missing SKUs to catalog: tickets (10,000 units), A3/A3 colored variants and A5 colored — list these for onboarding suppliers to capture known demand (cite combined lost units ~21,100).
+- Reorder Cardstock levels: 3 lost requests/1,200 units plus top-seller status (3,300 units sold) — increase reorder point and negotiate faster lead times.
+- Consider small-range additions for posters/flyers (total lost ~9,500 units) and set promotional discounts to convert unmet demand quickly.
+
+(Recommendations based on provided lost-demand log and April 1–17 financials.)
 
