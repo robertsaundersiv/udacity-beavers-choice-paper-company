@@ -1,207 +1,217 @@
 ﻿request_id,request_date,cash_balance,inventory_value,response
-2,2025-04-01,45141.0,4875.3,"Thank you — your order is confirmed.
+2,2025-04-01,45141.0,4875.3,"Thanks — we’ve reserved these items for your ceremony and wish you a wonderful event.
 
-Confirmed (SOLD) items:
-- Glossy paper | 200 | $0.25 each | line total $50.00 | Delivery: 2025-04-05
-- Cardstock | 100 | $0.188 each | line total $18.80 | Delivery: 2025-04-02
-- Colored paper | 100 | $0.125 each | line total $12.50 | Delivery: 2025-04-02
+Your confirmed order:
+- Glossy paper (you asked for ""A4 glossy paper""): 200 units at $0.25 each = $50.00, delivered by April 5, 2025
+- Cardstock (you asked for ""heavy cardstock (white)""): 100 units at $0.188 each = $18.80, delivered by April 2, 2025
+- Colored paper (you asked for ""colored paper (assorted colors)""): 100 units at $0.125 each = $12.50, delivered by April 2, 2025
+Discount: Bulk discounts start at 1,000 units (5%), rising to 10% at 5,000 and 15% at 10,000; this order has 400 units, so list prices apply.
+Total charged: $81.30.
 
-Discount applied: 0% (no bulk discount — discounts begin at 1,000 units). Total charged: $81.30. All items will be delivered by or before your requested date of 2025-04-15.
+To change anything, please send us a new request."
+3,2025-04-03,45141.0,4875.3,"Thank you for your request. I’m sorry we couldn’t supply these items for your parade; I hope it’s a great event.
 
-If you’d like an invoice, shipping confirmation, or to change quantities before shipping, tell me and I’ll take care of it. Thank you and best wishes for the ceremony."
-3,2025-04-03,45141.0,4875.3,"Hello — thanks for your order. I’m sorry, but we cannot supply any of the exact items you requested by your deliver-by date (2025-04-15):
+We could not supply:
+- colorful poster paper (500 requested): we do not stock this item.
+- roll of streamers (300 requested): we do not stock this item.
+- balloons (200 requested): this is not in our catalog.
 
-- 500 sheets colorful poster paper — UNAVAILABLE (the exact catalog item “Poster paper” is not stocked).
-- 300 roll of streamers — UNAVAILABLE (the exact catalog item “Party streamers” is not stocked).
-- 200 balloons — NOT IN OUR CATALOG (we do not carry balloons).
+We are sorry we could not help this time. Nothing has been charged.
 
-No items were charged. We can offer possible in-stock substitutions if you’d like (e.g. Large poster paper (24x36 inches) instead of “Poster paper”, or crepe paper/rolls of banner paper instead of streamers). Tell me which substitutions you accept or if you want us to attempt procurement for the exact items and I’ll proceed."
-4,2025-04-04,45174.850000000006,4868.45,"Confirmed: we have recorded and charged the A4 line and could not match the others.
+To change anything, please send us a new request."
+4,2025-04-04,45174.850000000006,4868.45,"Thanks — we’ve reserved the A4 paper for your conference and will ensure delivery as arranged. I’m sorry we can’t supply two of the requested items because they are not in our catalog.
 
-SOLD:
-- A4 paper | 10,000 sheets — Unit price $0.062 | Line total $527.00 (15% bulk discount applied). Delivery confirmed: 2025-04-11. Total charged: $527.00.
+Your confirmed order:
+- A4 paper: 10,000 units at $0.062 each, less 15% bulk discount = $527.00, delivered by April 11, 2025
+Discount: Your order totals 10,000 units, which qualifies for our 15% bulk discount on every item.
+Total charged: $527.00.
 
-NOT SUPPLIED:
-- 5,000 sheets of A3 paper — NOT IN OUR CATALOG (we have no A3 SKU to check or order).
-- 500 reams of printer paper — NOT IN OUR CATALOG (customer wording did not match any exact catalog SKU).
+We could not supply:
+- A3 paper (5,000 requested): this is not in our catalog.
+- printer paper (500 requested): this is not in our catalog.
 
-Apologies that we couldn’t supply the A3 sheets or the 500 reams as written. If you can provide exact catalog names or accept recommended equivalents, we’ll match them, check availability and quote immediately. Thank you — please send any updates if you want those lines processed."
-5,2025-04-05,45248.9,4816.4,"Thanks — your order is confirmed.
+To change anything, please send us a new request."
+5,2025-04-05,45248.9,4816.4,"Thanks — your items are confirmed and will be delivered in time for your reception. Wishing you a wonderful event!
 
-SOLD:
-- Cardstock | 500 units | $0.188 per unit | line total $94.00
-- A4 paper | 250 units | $0.062 per unit | line total $15.50
-Discount: 0% (order total 750 units, below our 1,000-unit bulk discount threshold).
-Total charged: $109.50
-Delivery date: Expected delivery 2025-04-09 (meets your deliver-by 2025-04-15).
+Your confirmed order:
+- Cardstock (you asked for ""high-quality, recycled cardstock (various colors)""): 500 units at $0.188 each = $94.00, delivered by April 9, 2025
+- A4 paper (you asked for ""A4 size printer paper""): 250 units at $0.062 each = $15.50, delivered by April 9, 2025
+Discount: Bulk discounts start at 1,000 units (5%), rising to 10% at 5,000 and 15% at 10,000; this order has 750 units, so list prices apply.
+Total charged: $109.50.
 
-All requested items are supplied and recorded as sales. If you’d like tracking, a printable receipt, or to increase quantities to reach the 5% discount at 1,000 units, tell me and I’ll arrange it."
-6,2025-04-05,45322.8,4766.4,"Thank you — your order is confirmed.
+To change anything, please send us a new request."
+6,2025-04-05,45322.8,4766.4,"Thanks — we’ve reserved the items we could supply and are sorry we couldn’t fulfill one of your requests. Wishing you a wonderful party!
 
-SOLD:
-- Colored paper — 500 sheets at $0.125 each = $62.50 (unit price from quote). Delivery date: 2025-04-09.
-- Cardstock (various colors) — 300 sheets at $0.188 each = $56.40. Delivery date: 2025-04-09.
+Your confirmed order:
+- Colored paper (you asked for ""8.5""x11"" colored paper""): 500 units at $0.125 each = $62.50, delivered by April 9, 2025
+- Cardstock (you asked for ""cardstock in various colors""): 300 units at $0.188 each = $56.40, delivered by April 9, 2025
+Discount: Bulk discounts start at 1,000 units (5%), rising to 10% at 5,000 and 15% at 10,000; this order has 800 units, so list prices apply.
+Total charged: $118.90.
 
-Discount: 0% (order total 800 units; our first bulk discount tier is 1,000 units). Total charged: $118.90.
+We could not supply:
+- decorative washi tape (200 requested): we do not stock this item.
 
-UNAVAILABLE:
-- Decorative adhesive tape (washi tape) — 200 rolls: NOT IN OUR CATALOG / we do not stock this item, so we cannot supply it.
+To change anything, please send us a new request."
+7,2025-04-06,45330.4,4766.4,"Thanks — we’ve supplied the Cardstock for your assembly. I’m sorry we couldn’t supply the other items; best wishes for your event.
 
-If you’d like, I can: confirm exact color breakdown for the Cardstock, or attempt to source washi tape externally if you authorize non-catalog purchases. Send any updates and I’ll act promptly."
-7,2025-04-06,45330.4,4766.4,"Thank you — here’s what I can confirm for your 2025-04-06 request, delivery by 2025-04-15:
+Your confirmed order:
+- Cardstock (you asked for ""cardstock in various colors""): 200 units at $0.188 each = $37.60, delivered by April 10, 2025
+Discount: Bulk discounts start at 1,000 units (5%), rising to 10% at 5,000 and 15% at 10,000; this order has 200 units, so list prices apply.
+Total charged: $37.60.
 
-Requested items:
-- colorful construction paper | 500 — UNAVAILABLE: not in our catalog / we do not stock this item.
-- white printer paper | 300 — UNAVAILABLE: not in our catalog / we do not stock this item.
-- Cardstock | 200 — SOLD: unit price $0.188, line total $37.60, discount 0% (no bulk discount under 1,000 units). Delivery date: 2025-04-10. Total charged: $37.60.
+We could not supply:
+- colorful construction paper (500 requested): we do not stock this item.
+- white printer paper (300 requested): this is not in our catalog.
 
-Apologies we can’t supply the two paper types — if you’d like, I can suggest stocked alternatives or place a special-order request. Send any changes and I’ll help."
-8,2025-04-07,45759.12,4418.400000000001,"Thank you — your order for the exhibition is confirmed. 
+To change anything, please send us a new request."
+8,2025-04-07,45759.12,4418.400000000001,"Thanks for your order — we’re pleased to have supplied the items we could, and we’re sorry one requested item isn’t in our catalog.
 
-SOLD (confirmed)
-- Glossy paper — 500 sheets — $0.25 each — line total $118.75 — delivery 2025-04-11
-- Large poster paper (24x36 inches) — 300 — $1.25 each — line total $356.25 — delivery 2025-04-11
-- Cardstock — 200 sheets — $0.19 each — line total $35.72 — delivery 2025-04-11
+Your confirmed order:
+- Glossy paper (you asked for ""glossy A4 paper""): 500 units at $0.25 each, less 5% bulk discount = $118.75, delivered by April 11, 2025
+- Large poster paper (24x36 inches) (you asked for ""poster boards (24"" x 36"")""): 300 units at $1.25 each, less 5% bulk discount = $356.25, delivered by April 11, 2025
+- Cardstock (you asked for ""heavyweight cardstock""): 200 units at $0.188 each, less 5% bulk discount = $35.72, delivered by April 11, 2025
+Discount: Your order totals 1,000 units, which qualifies for our 5% bulk discount on every item.
+Total charged: $510.72.
 
-Discount: 5% bulk discount applied because your order totals 1,000 units.
-Total charged: $510.72 (final, recorded).
+We could not supply:
+- matte A3 paper (1,000 requested): this is not in our catalog.
 
-UNAVAILABLE
-- Matte A3 paper — 1000 sheets — NOT IN OUR CATALOG: we do not stock this exact item and cannot reorder it.
+To change anything, please send us a new request."
+9,2025-04-07,45784.12,4418.400000000001,"Thank you — we’ve reserved the available glossy paper for your ceremony. I’m sorry we couldn’t supply the other items.
 
-Apologies we couldn’t supply the matte A3. If you’d like, I can look for a stocked matte-like alternative or propose other options. Please tell me how you’d like to proceed."
-9,2025-04-07,45784.12,4418.400000000001,"Order confirmation — Request date: 2025-04-07. Deliver-by: 2025-04-15.
+Your confirmed order:
+- Glossy paper (you asked for ""A4 glossy paper""): 500 units at $0.25 each = $125.00, delivered by April 11, 2025
+Discount: Bulk discounts start at 1,000 units (5%), rising to 10% at 5,000 and 15% at 10,000; this order has 500 units, so list prices apply.
+Total charged: $125.00.
 
-Confirmed (SOLD):
-- Glossy paper — 500 sheets @ $0.25 each = $125.00. Discount: 0% (bulk discounts start at 1,000 units). Delivery: expected 2025-04-11. Total charged: $125.00.
+We could not supply:
+- A4 matte paper (1,000 requested): we do not stock this item.
+- A5 colored paper (2,000 requested): this is not in our catalog.
+- A4 recycled paper (3,000 requested): we do not stock this item.
 
-Unable to supply:
-- A4 matte paper — 1000 sheets: NOT IN OUR CATALOG / we do not stock this exact item.
-- A5 colored paper — 2000 sheets: NOT IN OUR CATALOG (A5 size not stocked); this line was excluded from processing.
-- A4 recycled paper — 3000 sheets: NOT IN OUR CATALOG / we do not stock this exact item.
+To change anything, please send us a new request."
+10,2025-04-07,45784.12,4418.400000000001,"Thank you for your request. I’m sorry we can’t supply these items for your reception; I hope the event goes wonderfully.
 
-Apologies we can’t supply those items. Nothing was charged for unavailable lines. If you’d like substitutes, a re-quote for larger quantities (to reach discount tiers), or to proceed with alternatives, tell me and I’ll arrange it."
-10,2025-04-07,45784.12,4418.400000000001,"I'm sorry — we cannot supply these items by your requested deliver-by date (2025-04-10).
+We could not supply:
+- A4 white printer paper (200 requested): we cannot have enough in stock by your date of April 10, 2025.
+- A3 glossy paper (100 requested): this is not in our catalog.
+- 100% recycled kraft paper envelopes (50 requested): we do not stock this item.
 
-Requested items and outcome:
-- A4 paper — 200 sheets: UNAVAILABLE — cannot be delivered by 2025-04-10.
-- A3 glossy paper — 100 sheets: NOT IN OUR CATALOG — we do not carry A3 size.
-- Envelopes — 50 packets: NOT IN OUR CATALOG / NOT STOCKED by our company.
+We are sorry we could not help this time. Nothing has been charged.
 
-No items were sold or charged. I apologise for the inconvenience. You can either: provide a later delivery date so we can place the order; ask me to suggest catalog-equivalent alternatives we do stock; or send a revised request. Tell me which you prefer and I’ll proceed."
-11,2025-04-08,45784.12,4418.400000000001,"Hello — I’m sorry, but we cannot fulfil this order by 2025-04-10.
+To change anything, please send us a new request."
+11,2025-04-08,45784.12,4418.400000000001,"Thank you for your request. I’m sorry we can’t supply these items in time for your event. Wishing you a successful and enjoyable gathering.
 
-Requested items:
-- A4 paper | 500 sheets — UNAVAILABLE: cannot be delivered by 2025-04-10.
-- Cardstock | 200 sheets — UNAVAILABLE: cannot be delivered by 2025-04-10.
+We could not supply:
+- A4 printing paper (500 requested): we cannot have enough in stock by your date of April 10, 2025.
+- cardstock (200 requested): we cannot have enough in stock by your date of April 10, 2025.
 
-Apologies — nothing could be supplied and no charge has been made. Would you like us to (a) proceed with delivery after 2025-04-12, or (b) cancel the request? Reply with your choice and we’ll proceed."
-12,2025-04-08,45791.72,4418.400000000001,"Thank you — order confirmation for your requested delivery-by 2025-04-15 (request date 2025-04-08):
+We are sorry we could not help this time. Nothing has been charged.
 
-SOLD (confirmed and recorded):
-- Cardstock — 200 units — unit price $0.188 — line total $37.60 — Discount: 0% (no bulk discount; discounts start at 1,000 units) — Delivery date: 2025-04-12
+To change anything, please send us a new request."
+12,2025-04-08,45791.72,4418.400000000001,"Thank you — we’ve reserved the cardstock for your event and I’m sorry we couldn’t supply the other items. I hope your party goes wonderfully!
 
-UNAVAILABLE (not supplied):
-- Standard copy paper — 500 sheets — Reason: Item not stocked in our catalog
-- Paper napkins — 100 — Reason: Item not stocked in our catalog
+Your confirmed order:
+- Cardstock (you asked for ""colorful cardstock""): 200 units at $0.188 each = $37.60, delivered by April 12, 2025
+Discount: Bulk discounts start at 1,000 units (5%), rising to 10% at 5,000 and 15% at 10,000; this order has 200 units, so list prices apply.
+Total charged: $37.60.
 
-Total charged: $37.60 (recorded and final). If you’d like alternatives for the unavailable items (stocked paper substitutes or disposable alternatives) or want to increase cardstock quantity to reach a bulk discount tier, send your preferences and I’ll arrange availability and pricing. Thank you for ordering with Beaver’s Choice Paper Company."
-13,2025-04-08,45828.12,4418.400000000001,"Thanks — your order is confirmed.
+We could not supply:
+- standard printer paper (500 requested): we do not stock this item.
+- paper napkins (100 requested): we do not stock this item.
 
-SOLD:
-- Glossy paper — 500 sheets — $0.25 each — line total $125.00 — Delivery: 2025-04-12
-- Cardstock — 300 sheets — $0.188 each — line total $56.40 — Delivery: 2025-04-12
+To change anything, please send us a new request."
+13,2025-04-08,45828.12,4418.400000000001,"Thanks — your order is confirmed and will be delivered in time for your show. Wishing you a successful event!
 
-Discount: 0% (order total 800 units, below the 1,000-unit bulk discount threshold). Total charged: $181.40. 
+Your confirmed order:
+- Glossy paper (you asked for ""high-quality glossy paper""): 500 units at $0.25 each = $125.00, delivered by April 12, 2025
+- Cardstock (you asked for ""sturdy cardstock""): 300 units at $0.188 each = $56.40, delivered by April 12, 2025
+Discount: Bulk discounts start at 1,000 units (5%), rising to 10% at 5,000 and 15% at 10,000; this order has 800 units, so list prices apply.
+Total charged: $181.40.
 
-All items are confirmed SOLD and scheduled to arrive by 2025-04-12 (meets your requested deliver-by date of 2025-04-15). If you’d like a packing slip or a PDF quote, or want to increase quantities to reach the discount threshold, let me know."
-14,2025-04-08,45853.12,4418.400000000001,"Thank you — your order update:
+To change anything, please send us a new request."
+14,2025-04-08,45828.12,4418.400000000001,"Thank you for your request. I’m sorry we can’t supply the paper you requested for your exhibition. Wishing you a successful event.
 
-SOLD: Glossy paper — 500 sheets — $0.25 each — line total $125.00. Discount: 0% (bulk discounts start at 1,000 units). Total charged: $125.00. Delivery: confirmed for 2025-04-12 (meets your 2025-04-15 required date).
+We could not supply:
+- A3 glossy paper (500 requested): this is not in our catalog.
+- A4 matte paper (300 requested): we do not stock this item.
 
-UNAVAILABLE: Matte paper — 300 sheets — cannot supply: this item is not stocked in our catalog.
+We are sorry we could not help this time. Nothing has been charged.
 
-If you’d like, I can check stocked alternatives (e.g., “A4 paper” or “Photo paper”) or run a revised quote if you change quantities. Thank you — please send any changes."
-15,2025-04-09,45872.12,4418.400000000001,"Hello — thank you for your order. Summary of what we processed:
+To change anything, please send us a new request."
+15,2025-04-09,45847.12,4418.400000000001,"Thanks — we were able to supply the cardstock for your performance. I’m sorry we can’t supply the A4 or poster paper in time.
 
-SOLD:
-- Cardstock | 500 sheets — Unit price $0.188 | Line total $94.00. Discount: 0% (bulk discounts start at 1,000 units). Delivery date: 2025-04-13.
+Your confirmed order:
+- Cardstock: 500 units at $0.188 each = $94.00, delivered by April 13, 2025
+Discount: Bulk discounts start at 1,000 units (5%), rising to 10% at 5,000 and 15% at 10,000; this order has 500 units, so list prices apply.
+Total charged: $94.00.
 
-UNAVAILABLE (not supplied):
-- A4 paper | 5,000 sheets — UNAVAILABLE: earliest available date is 2025-04-16, which is after your requested deliver-by date of 2025-04-15, so we cannot promise on-time delivery.
-- Poster paper | 2,000 sheets — NOT IN OUR CATALOG: we do not stock this exact catalog item and cannot supply it as requested.
+We could not supply:
+- A4 paper (5,000 requested): we cannot have enough in stock by your date of April 15, 2025.
+- poster paper in various colors (2,000 requested): we do not stock this item.
 
-Total charged: $94.00. Only the Cardstock line above was sold and recorded. I’m sorry we can’t supply the full order by your date. If you’d like, I can (a) confirm substitutes for poster paper, (b) request expedited options for A4 (requires approval), or (c) prepare a revised quote to reach the 1,000-unit discount threshold. Which would you prefer?"
-16,2025-04-12,45872.12,4418.400000000001,"Thank you — summary of your request:
-- A4 paper | 10,000 sheets
-- A3 colored paper (assorted) | 5,000 sheets
-- Cardstock | 500 reams
+To change anything, please send us a new request."
+16,2025-04-12,45847.12,4418.400000000001,"Thank you for your request. I’m sorry we can’t supply these items for your requested date; best wishes for a successful demonstration.
 
-I’m sorry — we cannot supply any of these by 2025-04-15. Each line cannot be delivered by your requested date and is therefore UNAVAILABLE. No charges have been made.
+We could not supply:
+- A4 white paper (10,000 requested): we cannot have enough in stock by your date of April 15, 2025.
+- A3 colored paper (assorted colors) (5,000 requested): this is not in our catalog.
+- cardboard for signage (500 requested): we cannot have enough in stock by your date of April 15, 2025.
 
-If you’d like, I can (a) place the order for delivery on the next available date, or (b) modify quantities or the deliver-by date to meet your deadline. Please tell me which you prefer and I’ll proceed."
-17,2025-04-13,45872.12,4418.400000000001,"I’m sorry — we cannot supply any of the requested items in time for delivery by 2025-04-15.
+We are sorry we could not help this time. Nothing has been charged.
 
-Order requested:
-- A4 printer paper — 500 sheets: UNAVAILABLE — we cannot restock the requested quantity in time to meet your April 15 deadline.
-- Colorful construction paper — 200 sheets: NOT IN OUR CATALOG — we do not carry this item and cannot supply it.
-- Poster board — 100 sheets: NOT IN OUR CATALOG — we do not carry this item and did not check stock for it.
+To change anything, please send us a new request."
+17,2025-04-13,45847.12,4418.400000000001,"Thank you for your request. I’m sorry we can’t supply these items for your assembly — I hope your event goes smoothly and is a success.
 
-Nothing was charged. I apologise we can’t meet your assembly deadline. If you’d like, I can: 1) suggest catalog alternatives we do stock, or 2) accept a revised request with a later delivery date. Tell me which you prefer and I’ll proceed."
-18,2025-04-14,45822.12,4468.400000000001,"Hello — thank you for your order. I’m sorry we can’t meet your April 15 deadline for the requested items.
+We could not supply:
+- A4 printer paper (500 requested): we cannot have enough in stock by your date of April 15, 2025.
+- colorful construction paper (200 requested): we do not stock this item.
+- poster board (100 requested): this is not in our catalog.
 
-Outcome by line:
-- A4 paper | 1000 sheets — UNAVAILABLE: we cannot supply the full requested quantity in time for April 15.
-- A3 colored paper | 500 sheets — NOT IN OUR CATALOG: we do not carry A3-sized paper.
-- Table napkins (white) | 2000 — UNAVAILABLE: item not stocked by our company.
-- Paper cups (biodegradable) | 1000 — UNAVAILABLE: item not stocked by our company.
-- Paper plates (biodegradable) | 500 — CANNOT DELIVER BY DATE: we cannot deliver these by April 15.
+We are sorry we could not help this time. Nothing has been charged.
 
-Nothing has been charged. I’m sorry we couldn’t supply anything by your requested date.
+To change anything, please send us a new request."
+18,2025-04-14,45847.12,4418.400000000001,"Thank you for your request. I’m sorry we couldn’t supply these in time. I hope your reception goes well.
 
-If you’d like, I can:
-- re-run the order if you accept delivery on April 18 instead of April 15,
-- prepare revised quotes for different quantities or substitute catalog items we do stock, or
-- hold on this request and await your instructions.
+We could not supply:
+- A4 white printer paper (1,000 requested): we cannot have enough in stock by your date of April 15, 2025.
+- A3 colored paper (assorted colors) (500 requested): this is not in our catalog.
+- table napkins (white) (2,000 requested): we do not stock this item.
+- paper cups (biodegradable) (1,000 requested): we do not stock this item.
+- paper plates (biodegradable) (500 requested): it cannot be delivered by your date of April 15, 2025.
 
-Please tell me which option you prefer and I will proceed immediately."
-19,2025-04-14,45822.12,4468.400000000001,"Hello — thank you for your order. I’m sorry, but we cannot supply any of these items by 2025-04-15.
+We are sorry we could not help this time. Nothing has been charged.
 
-Requested lines and outcomes:
-- Cardstock | 500 — UNAVAILABLE: cannot be delivered by 2025-04-15.
-- Standard copy paper | 1000 — UNAVAILABLE: this exact item is not in our catalog.
-- Colored paper | 200 — UNAVAILABLE: cannot be delivered by 2025-04-15.
+To change anything, please send us a new request."
+19,2025-04-14,45847.12,4418.400000000001,"Thank you for your request. I’m very sorry we can’t supply these items for your date. I hope your ceremony is a wonderful success.
 
-Because nothing could be supplied, nothing was charged. I apologize for the inconvenience. Next steps I can take if you wish:
-- Schedule the order for delivery on or after 2025-04-18, or
-- Propose in-catalog substitutes for the standard copy paper.
-Please tell me which option you prefer or if you’d like a different date."
-20,2025-04-15,45850.72,4468.400000000001,"Dear Customer,
+We could not supply:
+- high-quality white cardstock (500 requested): we cannot have enough in stock by your date of April 15, 2025.
+- standard printing paper (1,000 requested): we do not stock this item.
+- colored paper in assorted colors (200 requested): we cannot have enough in stock by your date of April 15, 2025.
 
-Thank you — here is the order status for your exhibition (request 2025-04-15, deliver-by 2025-04-20):
+We are sorry we could not help this time. Nothing has been charged.
 
-SOLD:
-- Cardstock — 1000 units @ $0.188 per unit; 5% bulk discount applied (meets 1,000-unit tier). Line total charged: $178.60. Delivery date: 2025-04-19.
+To change anything, please send us a new request."
+20,2025-04-15,45875.72,4418.400000000001,"Thank you — we’ve supplied what we could and are sorry we couldn’t provide everything for your event. Wishing your exhibition every success!
+
+Your confirmed order:
+- Cardstock (you asked for ""cardstock in assorted colors""): 1,000 units at $0.188 each, less 5% bulk discount = $178.60, delivered by April 19, 2025
+Discount: Your order totals 1,000 units, which qualifies for our 5% bulk discount on every item.
 Total charged: $178.60.
 
-UNAVAILABLE:
-- A4 glossy paper — 2000 sheets: UNAVAILABLE. We cannot supply the full requested quantity in time for the 2025-04-20 deliver-by date.
-- A3 matte paper — 1500 sheets: NOT IN OUR CATALOG / NOT STOCKED; we cannot supply or reorder this item through our catalog.
+We could not supply:
+- A4 glossy paper (2,000 requested): we cannot have enough in stock by your date of April 20, 2025.
+- A3 matte paper (1,500 requested): this is not in our catalog.
 
-If you’d like alternative stocked items or want us to pursue other options, tell us and we’ll proceed.
+To change anything, please send us a new request."
+21,2025-04-17,45875.72,4418.400000000001,"Thank you for your request. I’m sorry we couldn’t supply these items. Wishing you a fantastic concert and successful promotion!
 
-Kind regards."
-21,2025-04-17,45850.72,4468.400000000001,"Thank you — we’ve reviewed your request (requested 2025-04-17; deliver-by 2025-05-15).
+We could not supply:
+- flyers (5,000 requested): we do not stock this item.
+- posters (2,000 requested): we do not stock this item.
+- tickets (10,000 requested): this is not in our catalog.
 
-Requested items and quantities:
-- Flyers — 5,000: UNAVAILABLE — we do not stock an item called “Flyers” in our catalog and cannot supply it as requested.
-- Posters — 2,000: UNAVAILABLE — there is no catalog item named exactly “Poster paper.” We do have “Large poster paper (24x36 inches)” with 399 units available; the remainder would require a restock and lead-time check.
-- Tickets — 10,000: NOT IN OUR CATALOG — we do not carry an item named “tickets” and cannot supply them.
+We are sorry we could not help this time. Nothing has been charged.
 
-I’m sorry we can’t yet fulfil the order as written. Nothing has been charged.
-
-If you’d like, we can:
-- Offer up to 399 units now of Large poster paper (24x36 inches) and, if you accept that substitution, I can check lead time and reorder the shortfall to try to meet May 15; or
-- Please clarify what you mean by “Flyers” (size, paper weight, finish or a catalog SKU) so I can match it to a stocked item or arrange a special order.
-
-Tell me how you’d like to proceed and I’ll act on it right away."
+To change anything, please send us a new request."

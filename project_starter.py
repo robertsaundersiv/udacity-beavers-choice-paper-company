@@ -627,12 +627,14 @@ def search_quote_history(search_terms: List[str], limit: int = 5) -> List[Dict]:
 ########################
 #
 # Architecture (see "Agent Workflow.md"): 5 agents built with smolagents.
-#   Orchestrator      -> parses the request, delegates, writes the customer reply
-#   Inventory Agent   -> stock checks and reorder decisions
-#   Quoting Agent     -> list prices, bulk discounts, quote totals
-#   Sales Agent       -> delivery-deadline check and recording sales
+#   Orchestrator      -> maps items to the catalog, delegates, returns a JSON plan
+#   Inventory Agent   -> stock checks and reorder decisions (JSON report)
+#   Quoting Agent     -> list prices, bulk discounts, quote totals (JSON report)
+#   Sales Agent       -> delivery-deadline check and recording sales (JSON report)
 #   Business Advisor  -> read-only review after each reply (internal notes only)
-# The model is configured at the top of this file (gpt-4o-mini via the proxy).
+# Every JSON report is checked against the tool records. The customer reply is
+# rendered in code from the plan + recorded sales, then sanitized.
+# The model is configured at the top of this file (gpt-5-mini via the proxy).
 
 
 # ---------------------------------------------------------------------------
@@ -766,6 +768,19 @@ def _closest_catalog_names(description: str, top_n: int = 3) -> List[Dict[str, A
     return [{"item_name": _catalog_names[i], "score": round(float(scores[i]), 2)} for i in best]
 
 
+# Paper sizes other than A4. The catalog's generic papers ("Glossy paper") are
+# standard A4/letter, so an A3 or A5 request is a different product.
+_NON_A4_PAPER_SIZE = re.compile(r"\bA(?:10|[0-35-9])\b", re.IGNORECASE)
+
+
+def _size_mismatch(description: str, item_name: str) -> Optional[str]:
+    """The paper size asked for (e.g. 'A3') if the catalog item is not that size, else None."""
+    for size in _NON_A4_PAPER_SIZE.findall(description):
+        if not re.search(rf"\b{size}\b", item_name, re.IGNORECASE):
+            return size.upper()
+    return None
+
+
 def _require_catalog_name(item_name: str) -> None:
     """Reject anything that is not an exact catalog name, suggesting close ones."""
     if item_name not in CATALOG:
@@ -817,6 +832,10 @@ def start_request_context(request_date: str, deliver_by: str) -> None:
         "item_status": {},      # item_name -> AVAILABLE / RESTOCK_NEEDED / NOT_STOCKED / UNAVAILABLE
         "order_reorders": {},   # item_name -> reorder result
         "sold_lines": {},       # (item_name, quantity) -> {transaction_id, line_total, delivery}
+        "rejected_lines": {},   # item_name -> reason code from the Sales Agent's report
+        "quote_lines": {},      # item_name -> latest quote line from calculate_quote_tool
+        "discount_rate": 0.0,   # bulk discount rate of the latest quote
+        "quote_rationale": "",  # customer-friendly discount explanation of the latest quote
         "agents_called": set(), # names of worker agents the orchestrator delegated to
     })
 
@@ -840,19 +859,28 @@ def match_catalog_items_tool(item_descriptions: List[str]) -> str:
 
     Uses TF-IDF character n-gram similarity over the paper_supplies catalog
     (no database helper). Returns the 3 closest catalog names per description
-    so you can pick the one that is genuinely the same product.
+    so you can pick the one that is genuinely the same product. Candidates of
+    the wrong paper size (e.g. "Glossy paper" for "A3 glossy paper") are
+    removed, because we only carry standard sizes.
 
     Args:
         item_descriptions: Item phrases as the customer wrote them, e.g. ["A4 glossy paper", "heavy cardstock (white)"].
 
     Returns:
-        JSON list with the top 3 candidate item names and similarity scores (0-1) per description.
+        JSON list with up to 3 candidate item names and similarity scores (0-1) per description, plus a note when a size is not carried.
     """
     progress.event("Orchestrator", f"matching {len(item_descriptions)} item(s) to the catalog")
-    return _to_json([
-        {"description": description, "candidates": _closest_catalog_names(description)}
-        for description in item_descriptions
-    ])
+    matches = []
+    for description in item_descriptions:
+        candidates = _closest_catalog_names(description)
+        sized = [c for c in candidates if not _size_mismatch(description, c["item_name"])]
+        match = {"description": description, "candidates": sized}
+        if len(sized) < len(candidates):
+            size = _size_mismatch(description, "")  # the non-A4 size the customer asked for
+            match["note"] = (f"We do not carry {size} size; a candidate of a different size is not the "
+                             "same product." + (" This item is NOT IN OUR CATALOG." if not sized else ""))
+        matches.append(match)
+    return _to_json(matches)
 
 
 # ---------------------------------------------------------------------------
@@ -1109,6 +1137,10 @@ def calculate_quote_tool(item_names: List[str], quantities: List[int]) -> str:
     else:
         rationale = (f"Bulk discounts start at 1,000 units (5%), rising to 10% at 5,000 and "
                      f"15% at 10,000; this order has {total_units:,} units, so list prices apply.")
+    # Keep the quote so the Quoting Agent's report and the customer reply can be checked against it.
+    if "quote_lines" in _request_context:
+        _request_context["quote_lines"].update({line["item_name"]: line for line in lines})
+        _request_context.update(discount_rate=rate, quote_rationale=rationale)
     return _to_json({"lines": lines, "total_units": total_units, "discount_rate": rate,
                      "quote_total": total, "rationale": rationale})
 
@@ -1299,8 +1331,13 @@ as a stock health check.
 If a tool says a name is not an exact catalog name, retry with the closest
 exact name only if it is clearly the same product.
 
-Final answer: one line per item, exactly:
-<item name> | <quantity> | AVAILABLE or UNAVAILABLE | <short reason>
+Final answer: ONLY this JSON object, no other text:
+{"items": [{"item_name": "<exact name>", "quantity": <int>,
+            "status": "AVAILABLE" or "UNAVAILABLE",
+            "reason": null or "not_stocked" or "cannot_supply_in_time"}]}
+reason is null for AVAILABLE items, "not_stocked" for NOT_STOCKED items and
+"cannot_supply_in_time" when a needed restock is too late or not affordable.
+Add no other fields: never stock counts, costs, cash or supplier dates.
 """.strip()
 
 QUOTING_INSTRUCTIONS = """
@@ -1313,12 +1350,14 @@ You are the Quoting Agent of Beaver's Choice Paper Company. You price orders.
    compute or change prices yourself; use its numbers exactly.
    (Use price_lookup_tool only for a price question without quantities.)
 
-Final answer: one line per item, exactly:
-<item name> | <quantity> | $<unit_price> per unit | $<line_total>
-then "Discount: <rate>", "Quote total: $<quote_total>", and a one or two
-sentence customer-friendly rationale (use the tool's rationale; you may mention
-that it is in line with similar past orders). Never mention cost, markup or
-margin.
+Final answer: ONLY this JSON object, copying calculate_quote_tool's numbers
+exactly:
+{"lines": [{"item_name": "<exact name>", "quantity": <int>,
+            "unit_price": <number>, "line_total": <number>}],
+ "discount_rate": <number>, "quote_total": <number>,
+ "rationale": "<the tool's rationale>"}
+You may add to the rationale that the price is in line with similar past
+orders. Never mention cost, markup or margin.
 """.strip()
 
 SALES_INSTRUCTIONS = """
@@ -1334,17 +1373,24 @@ For EACH quote line (item name, quantity, line total):
    line total. If ok is true the line is SOLD; otherwise it is REJECTED with
    the reason returned.
 
-Final answer: one line per item, exactly:
-<item name> | <quantity> | SOLD or REJECTED | $<line total> | <delivery date or reason>
-then "Total charged: $<sum of SOLD line totals>".
+Final answer: ONLY this JSON object, no other text:
+{"lines": [{"item_name": "<exact name>", "quantity": <int>,
+            "status": "SOLD" or "REJECTED", "line_total": <number>,
+            "delivery_date": "YYYY-MM-DD" or null,
+            "reason": null or "cannot_deliver_by_deadline" or "not_available"}],
+ "total_charged": <sum of SOLD line totals>}
+SOLD lines use the delivery date returned by record_sale_tool and reason null.
+REJECTED lines use delivery_date null and reason "cannot_deliver_by_deadline"
+(too late) or "not_available" (any other refusal).
 """.strip()
 
 ORCHESTRATOR_INSTRUCTIONS = """
 You are the Orchestrator (customer service lead) of Beaver's Choice Paper
 Company. You never check stock, set prices or record sales yourself: you
-delegate to your team and write the reply to the customer. The request date
-and deliver-by date are given at the top of each task and are applied by the
-team's tools automatically.
+delegate to your team and decide the outcome of every requested item. The
+request date and deliver-by date are given at the top of each task and are
+applied by the team's tools automatically. Each team member reports back as a
+JSON object.
 
 For every request:
 1. List every item the customer wants with its quantity (use the number the
@@ -1353,33 +1399,40 @@ For every request:
    choose the candidate that is genuinely the same product (e.g. "A4 glossy
    paper" -> "Glossy paper", "heavy cardstock" -> "Cardstock", "A4 printer
    paper" -> "A4 paper"). If no candidate is the same product (e.g. A3 or A5
-   paper, balloons, tickets, cardboard), the item is NOT IN OUR CATALOG and is
-   not sent to the team.
+   paper, balloons, tickets, cardboard), or the tool returns no candidates,
+   the item is NOT IN OUR CATALOG and is not sent to the team. Never use a
+   catalog name the tool did not return for that item.
 3. Call inventory_agent ONCE with every matched item as a line
    "<exact item name> | <quantity>". Copy the exact item_name strings from
    match_catalog_items_tool character for character - never the customer's
    wording.
-4. If at least one item is AVAILABLE, call quoting_agent ONCE with only the
-   AVAILABLE items as "<exact item name> | <quantity>" (and the event type, if
-   mentioned). Skip steps 4-5 if nothing is AVAILABLE.
+4. If at least one item has status AVAILABLE, call quoting_agent ONCE with
+   only the AVAILABLE items as "<exact item name> | <quantity>" (and the event
+   type, if mentioned). Skip steps 4-5 if nothing is AVAILABLE.
 5. Call sales_agent ONCE with every quote line as
-   "<exact item name> | <quantity> | <line total>".
-6. Give your final answer: a short, friendly plain-text reply to the customer
-   (under about 150 words):
-   - confirmed (SOLD) items with quantity, unit price and line total, the
-     discount applied and why, the total charged and the delivery date;
-   - every item we could not supply, each with a clear reason (not in our
-     catalog / we do not stock it / cannot be delivered by their date);
-   - if nothing could be supplied, apologise, explain why and confirm that
-     nothing was charged.
-SOLD lines are final, already-recorded orders: do not ask the customer to
-confirm them or to send addresses, payment or PO details. Only describe what
-actually happened. Do not offer or mention anything the company did not do:
-no taxes or shipping fees, partial shipments, expedited options, outside
-suppliers or substitutions. You may end by inviting the customer to send a new
-request if they want to change anything.
-Never reveal internal information: no costs, markups, margins, cash balances,
-stock counts, supplier details, agent or tool names, or error messages.
+   "<exact item name> | <quantity> | <line_total>".
+6. Final answer: ONLY this JSON object, no other text. The customer reply
+   (prices, discount, total, delivery dates and reasons) is written from it in
+   code using the recorded sales, so do not write the reply yourself:
+   {"items": [{"requested": "<customer's item wording, without the quantity>",
+               "quantity": <int>,
+               "catalog_item": "<exact item name>" or null,
+               "outcome": "SOLD" or "NOT_SUPPLIED",
+               "reason": null or "not_in_catalog" or "not_stocked" or
+                         "cannot_supply_in_time" or
+                         "cannot_deliver_by_deadline" or "not_available"}],
+    "note": "<one or two short, friendly sentences to the customer>"}
+   - One entry per item the customer asked for, in their order.
+     catalog_item is null (reason "not_in_catalog") for items NOT IN OUR
+     CATALOG.
+   - outcome SOLD (reason null) only for lines sales_agent reported SOLD;
+     every other item is NOT_SUPPLIED with the reason from the team's report.
+   - note: a warm, personal touch, e.g. wishing their event well, or an
+     apology if nothing could be supplied. No prices, numbers, dates or item
+     lists, no internal information (costs, stock counts, suppliers, agent or
+     tool names, errors) and no offers of anything the company did not do
+     (substitutions, sourcing, expedited delivery, invoices, tracking, or
+     "if you'd like, I can...").
 """.strip()
 
 ADVISOR_INSTRUCTIONS = """
@@ -1393,8 +1446,11 @@ before_date = the day before the review date and after_date = the review date
 one-line summary of the numbers and 2-4 short, specific recommendations as
 bullet points to improve revenue or efficiency (e.g. items worth adding to the
 range, reorder levels to raise, discount tiers, recurring reasons for lost
-sales). Base each on the numbers or the outcome you saw. Keep it under 150
-words. This is a written log: do not ask questions or offer further actions.
+sales). Base each on the numbers or the outcome you saw. A structured
+lost-demand log (unsold items with reason codes, request and unit counts) is
+included: base any recommendation about the product range or stock levels on
+it and cite its counts. Keep it under 150 words. This is a written log: do not
+ask questions or offer further actions.
 """.strip()
 
 
@@ -1418,11 +1474,172 @@ class WorkerAgent(ToolCallingAgent):
         return report
 
 
-def _mentions_date(reply: str, iso_date: str) -> bool:
-    """True if the reply mentions the date as YYYY-MM-DD or as e.g. 'April 8'."""
-    day = datetime.strptime(iso_date, "%Y-%m-%d")
-    return iso_date in reply or f"{day:%B} {day.day}" in reply
+# ---------------------------------------------------------------------------
+# Structured hand-offs: every agent reports back as a fixed JSON object
+# ---------------------------------------------------------------------------
+# Worker reports carry only what the next agent needs (status, reason code,
+# price, delivery date) - never stock counts, costs or cash - so internal data
+# cannot travel up to the customer reply. Each report is checked against what
+# the tools actually recorded; a mismatch is sent back to the agent to fix.
 
+INVENTORY_REASONS = {"not_stocked", "cannot_supply_in_time"}
+SALES_REASONS = {"cannot_deliver_by_deadline", "not_available"}
+PLAN_REASONS = {"not_in_catalog"} | INVENTORY_REASONS | SALES_REASONS
+
+
+def _parse_json_answer(answer: Any) -> Dict[str, Any]:
+    """Read an agent's final answer as a JSON object (a dict passes through)."""
+    if isinstance(answer, dict):
+        return answer
+    answer_text = str(answer)
+    start, end = answer_text.find("{"), answer_text.rfind("}")
+    parsed = None
+    if start != -1 and end > start:
+        body = answer_text[start:end + 1]
+        try:
+            parsed = json.loads(body)
+        except json.JSONDecodeError:
+            # The model sometimes passes a Python dict literal (single quotes, None).
+            try:
+                parsed = ast.literal_eval(body)
+            except (ValueError, SyntaxError):
+                parsed = None
+    if not isinstance(parsed, dict):
+        raise ValueError("The final answer must be ONLY the JSON object described in your instructions.")
+    return parsed
+
+
+def _check_keys(obj: Any, keys: Set[str], label: str) -> Dict[str, Any]:
+    """Require a JSON object with exactly these keys (no extra fields)."""
+    if not isinstance(obj, dict) or set(obj) != keys:
+        found = sorted(obj) if isinstance(obj, dict) else type(obj).__name__
+        raise ValueError(f"{label} must have exactly the keys {sorted(keys)}, got {found}. "
+                         "Add no other fields (no stock counts, costs, cash or supplier details).")
+    return obj
+
+
+def _check_rows(rows: Any, keys: Set[str], label: str) -> List[Dict[str, Any]]:
+    """Require a non-empty list of JSON objects, each with exactly these keys."""
+    if not isinstance(rows, list) or not rows:
+        raise ValueError(f"'{label}' must be a non-empty JSON list.")
+    return [_check_keys(row, keys, f"Each entry in '{label}'") for row in rows]
+
+
+def _as_int(value: Any, label: str) -> int:
+    """A whole-number field from a JSON report."""
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        raise ValueError(f"{label} must be a whole number, got {value!r}.")
+
+
+def _same_money(value: Any, expected: float) -> bool:
+    """True if a reported dollar amount equals the recorded one (to the cent)."""
+    try:
+        return abs(float(value) - expected) < 0.005
+    except (TypeError, ValueError):
+        return False
+
+
+def _reject(source: str, message: str) -> None:
+    """Show a rejected report on the progress display, then fail the check."""
+    progress.event(source, "report did not match the records - redoing it", "fail")
+    raise ValueError(message)
+
+
+def _inventory_report_problem(report: Dict[str, Any]) -> Optional[str]:
+    """Why an Inventory Agent report disagrees with the stock checks, or None."""
+    item_status = _current("item_status")
+    for row in _check_rows(_check_keys(report, {"items"}, "The report")["items"],
+                           {"item_name", "quantity", "status", "reason"}, "items"):
+        name, recorded = row["item_name"], item_status.get(row["item_name"])
+        if recorded is None:
+            return f"'{name}' was never checked: call check_stock_tool for it first."
+        status = "AVAILABLE" if recorded == "AVAILABLE" else "UNAVAILABLE"
+        reason = None if status == "AVAILABLE" else (
+            "not_stocked" if recorded == "NOT_STOCKED" else "cannot_supply_in_time")
+        if (row["status"], row["reason"]) != (status, reason):
+            return f"'{name}' must be reported with status {status!r} and reason {reason!r}."
+    return None
+
+
+def _quote_report_problem(report: Dict[str, Any]) -> Optional[str]:
+    """Why a Quoting Agent report disagrees with calculate_quote_tool, or None."""
+    report = _check_keys(report, {"lines", "discount_rate", "quote_total", "rationale"}, "The report")
+    quoted = _current("quote_lines")
+    for row in _check_rows(report["lines"], {"item_name", "quantity", "unit_price", "line_total"}, "lines"):
+        line = quoted.get(row["item_name"])
+        if (line is None or _as_int(row["quantity"], "quantity") != line["quantity"]
+                or not _same_money(row["line_total"], line["line_total"])):
+            return (f"Line {row} does not match calculate_quote_tool. Call it, then copy its "
+                    "item_name, quantity, unit_price and line_total exactly.")
+    if not _same_money(report["quote_total"], sum(float(row["line_total"]) for row in report["lines"])):
+        return "quote_total must equal the sum of the line totals."
+    if not str(report["rationale"]).strip():
+        return "Give the customer-friendly rationale from calculate_quote_tool."
+    return None
+
+
+def _sales_report_problem(report: Dict[str, Any]) -> Optional[str]:
+    """Why a Sales Agent report disagrees with the recorded sales, or None."""
+    report = _check_keys(report, {"lines", "total_charged"}, "The report")
+    sold = _current("sold_lines")
+    for row in _check_rows(report["lines"], {"item_name", "quantity", "status", "line_total",
+                                             "delivery_date", "reason"}, "lines"):
+        key = (row["item_name"], _as_int(row["quantity"], "quantity"))
+        line = sold.get(key)
+        if row["status"] == "SOLD":
+            if line is None:
+                return f"{key[0]} x{key[1]} was not recorded by record_sale_tool, so it is not SOLD."
+            if not _same_money(row["line_total"], line["line_total"]) or row["delivery_date"] != line["delivery"]:
+                return (f"Report {key[0]} with the recorded figures: line_total {line['line_total']}, "
+                        f"delivery_date {line['delivery']}.")
+        elif row["status"] == "REJECTED":
+            if line is not None:
+                return f"{key[0]} x{key[1]} was recorded by record_sale_tool, so it is SOLD."
+            if row["reason"] not in SALES_REASONS:
+                return f"A REJECTED line needs a reason from {sorted(SALES_REASONS)}."
+        else:
+            return "status must be SOLD or REJECTED."
+    reported = {(row["item_name"], int(row["quantity"])) for row in report["lines"] if row["status"] == "SOLD"}
+    missing = [f"{item} x{quantity}" for item, quantity in sold if (item, quantity) not in reported]
+    if missing:
+        return f"These lines were recorded as sales and must be reported SOLD: {missing}."
+    total = round(sum(line["line_total"] for line in sold.values()), 2)
+    if not _same_money(report["total_charged"], total):
+        return f"total_charged must be {total:.2f}, the sum of the SOLD lines."
+    return None
+
+
+def _report_check(source: str, find_problem):
+    """Build a smolagents final-answer check from a report validator."""
+    def check(final_answer: Any, memory: Any, agent: Any = None) -> bool:
+        try:
+            problem = find_problem(_parse_json_answer(final_answer))
+        except ValueError as exc:
+            problem = str(exc)
+        if problem:
+            _reject(source, problem)
+        return True
+    return check
+
+
+inventory_report_check = _report_check("Inventory Agent", _inventory_report_problem)
+quote_report_check = _report_check("Quoting Agent", _quote_report_problem)
+
+
+def sales_report_check(final_answer: Any, memory: Any, agent: Any = None) -> bool:
+    """Sales Agent final-answer check; also keeps each rejected line's reason for the reply."""
+    _report_check("Sales Agent", _sales_report_problem)(final_answer, memory, agent)
+    report = _parse_json_answer(final_answer)
+    _current("rejected_lines").update({row["item_name"]: row["reason"]
+                                       for row in report["lines"] if row["status"] == "REJECTED"})
+    return True
+
+
+# ---------------------------------------------------------------------------
+# Customer reply: rendered in code from the Orchestrator's plan + the records
+# ---------------------------------------------------------------------------
 
 # Phrases that must never reach a customer: internal data or services we do not offer.
 _INTERNAL_DETAIL_PATTERNS = [
@@ -1439,51 +1656,222 @@ _INTERNAL_DETAIL_PATTERNS = [
     )
 ]
 
+# Customer-facing phrases that reveal stock counts or offer services the company
+# did not perform (outside sourcing, expedited shipping, extra documents,
+# substitutions). A sentence containing one is removed before the reply is sent.
+CUSTOMER_BLOCKLIST = [
+    re.compile(pattern, re.IGNORECASE) for pattern in (
+        r"\b\d[\d,]*\s+(?:units?|sheets?)\s+available\b",
+        r"\b\d[\d,]*\s+(?:units?|sheets?)\s+(?:on hand|in stock|in inventory)\b",
+        r"\b(?:source|sourcing|procure|procurement|special-order|special order|outside supplier|external(?:ly)?)\b",
+        r"\b(?:expedited|shipping confirmation|tracking|invoice|PDF quote|packing slip|receipt)\b",
+        r"\b(?:substitut\w*|alternatives?|equivalents?|lead[- ]time)\b",
+    )
+]
 
-def _reject_reply(message: str) -> None:
-    """Show the rejection on the progress display, then fail the check."""
-    progress.event("Orchestrator", "reply did not match the records - rewriting", "fail")
-    raise ValueError(message)
+# Offers of follow-up work the system cannot carry out on a later turn (each
+# request is handled once). They are replaced by CUSTOMER_CLOSING.
+_CUSTOMER_OFFER_PATTERNS = [
+    re.compile(pattern, re.IGNORECASE) for pattern in (
+        r"\bif you(?:'|’)?d like\b",
+        r"\bif you (?:want|wish|can)\b",
+        r"\bwould you like\b",
+        r"\b(?:I|we) can (?!not\b|confirm\b)",
+        r"\b(?:I|we)(?:'|’)ll\b",
+        r"\blet (?:me|us) know\b",
+        r"\btell (?:me|us) (?:which|how|if)\b",
+        r"\bwhich (?:option )?(?:would )?you prefer\b",
+        r"\breply with your choice\b",
+    )
+]
+
+CUSTOMER_CLOSING = "To change anything, please send us a new request."
+
+# Splits a reply into sentences, including after a closing quote or bracket,
+# but not after the abbreviations "e.g." and "i.e.".
+_SENTENCE_BREAK = re.compile(r"(?<!e\.g\.)(?<!i\.e\.)(?<=[.!?])\s+|(?<=[.!?][”\"’')])\s+")
+_LIST_ITEM = re.compile(r"^\s*(?:[-•*]|\(?[a-z0-9]\)|\d+\.)\s")
+
+# The Orchestrator's note is free text, so it must not carry figures or dates:
+# every number the customer sees comes from the records.
+_FIGURES_IN_NOTE = re.compile(r"\$\s?\d|\d{4}-\d{2}-\d{2}|\b\d[\d,]*\s+(?:units?|sheets?|reams?)\b", re.IGNORECASE)
 
 
-def reply_matches_records(final_answer: Any, memory: Any, agent: Any = None) -> bool:
-    """Orchestrator final-answer check: the customer reply must match the records.
+def _customer_phrase_problems(reply: str) -> List[str]:
+    """Blocked or offer phrases found in a customer reply."""
+    return sorted({match.group(0) for pattern in CUSTOMER_BLOCKLIST + _CUSTOMER_OFFER_PATTERNS
+                   for match in pattern.finditer(reply)})
 
-    Rejects a reply (the agent then retries, seeing this error) when sellable
-    items were never sent to the Sales Agent, when the stated total differs from
-    the sales actually recorded, when a delivery date is missing, or when
-    nothing was sold but the reply does not say that nothing was charged.
+
+def _is_blocked_sentence(sentence: str) -> bool:
+    """True if the sentence must not reach the customer."""
+    return any(pattern.search(sentence) for pattern in CUSTOMER_BLOCKLIST + _CUSTOMER_OFFER_PATTERNS)
+
+
+def sanitize_customer_reply(reply: str) -> str:
+    """Remove every sentence that leaks stock counts or offers unperformed services.
+
+    Whole sentences are dropped (rather than words replaced) so the reply stays
+    readable. When an offer such as "If you'd like, I can:" is dropped, the
+    list of options under it goes too. If anything was removed, the reply ends
+    with the standard closing inviting a new request.
     """
-    reply = str(final_answer)
-    leaks = sorted({match.group(0) for pattern in _INTERNAL_DETAIL_PATTERNS
-                    for match in pattern.finditer(reply)})
+    kept_lines, removed, skipping_options = [], False, False
+    for line in reply.splitlines():
+        if skipping_options and _LIST_ITEM.match(line):
+            continue
+        skipping_options = False
+        kept = []
+        for sentence in _SENTENCE_BREAK.split(line):
+            if _is_blocked_sentence(sentence):
+                removed = True
+                skipping_options = sentence.rstrip().endswith(":")
+            else:
+                kept.append(sentence)
+        text = " ".join(kept).rstrip()
+        # Drop a list bullet emptied by the filter, but keep blank spacing lines.
+        if text.strip() not in {"", "-", "•", "*"} or not line.strip():
+            kept_lines.append(text)
+    cleaned = re.sub(r"\n{3,}", "\n\n", "\n".join(kept_lines)).strip()
+    if removed and CUSTOMER_CLOSING not in cleaned:
+        cleaned = f"{cleaned}\n\n{CUSTOMER_CLOSING}"
+    return cleaned
+
+
+def _plan_problem(plan: Dict[str, Any]) -> Optional[str]:
+    """Why the Orchestrator's plan disagrees with the records or its note is unsafe, or None."""
+    plan = _check_keys(plan, {"items", "note"}, "The final answer")
+    note = str(plan["note"] or "")
+    leaks = sorted({match.group(0) for pattern in _INTERNAL_DETAIL_PATTERNS for match in pattern.finditer(note)}
+                   | set(_customer_phrase_problems(note)) | {m.group(0) for m in _FIGURES_IN_NOTE.finditer(note)})
     if leaks:
-        _reject_reply(f"The reply reveals internal details or offers services we do not provide: {leaks}. "
-                      "Remove them: no stock counts, supplier or vendor details, transaction ids, costs, "
-                      "agent or tool names, partial shipments or outside sourcing.")
+        return (f"The note contains {leaks}. Keep it to one or two friendly sentences with no prices, "
+                "numbers, dates, internal details or offers of further services.")
 
-    available = [name for name, status in _current("item_status").items() if status == "AVAILABLE"]
+    item_status, sold = _current("item_status"), _current("sold_lines")
+    available = [name for name, status in item_status.items() if status == "AVAILABLE"]
     if available and "sales_agent" not in _current("agents_called"):
-        _reject_reply(f"Items {available} are AVAILABLE but the order was never finalized. "
-                         "Call quoting_agent (if not done) and then sales_agent before replying.")
+        return (f"Items {available} are AVAILABLE but the order was never finalized. "
+                "Call quoting_agent (if not done) and then sales_agent first.")
 
-    sold = _current("sold_lines")
+    rows = _check_rows(plan["items"], {"requested", "quantity", "catalog_item", "outcome", "reason"}, "items")
+    planned_sold = set()
+    for row in rows:
+        item, quantity = row["catalog_item"], _as_int(row["quantity"], "quantity")
+        if item is not None and item not in item_status:
+            return (f"'{item}' was never sent to inventory_agent. Send it, or set catalog_item to null "
+                    "if it is not the same product.")
+        if row["outcome"] == "SOLD":
+            if (item, quantity) not in sold:
+                return f"{item} x{quantity} was not sold by sales_agent: mark it NOT_SUPPLIED with a reason."
+            planned_sold.add((item, quantity))
+        elif row["outcome"] != "NOT_SUPPLIED" or row["reason"] not in PLAN_REASONS:
+            return f"Each item is SOLD, or NOT_SUPPLIED with a reason from {sorted(PLAN_REASONS)}."
+    missing_sold = [f"{item} x{quantity}" for item, quantity in sold if (item, quantity) not in planned_sold]
+    if missing_sold:
+        return f"These lines were sold and must be listed as SOLD: {missing_sold}."
+    missing_items = [name for name in item_status if name not in {row["catalog_item"] for row in rows}]
+    if missing_items:
+        return f"Every item sent to the team must be listed; missing: {missing_items}."
+    return None
+
+
+plan_matches_records = _report_check("Orchestrator", _plan_problem)
+
+
+def _long_date(iso_date: str) -> str:
+    """'2025-04-12' -> 'April 12, 2025'."""
+    day = datetime.strptime(iso_date, "%Y-%m-%d")
+    return f"{day:%B} {day.day}, {day.year}"
+
+
+def _unit_price_text(unit_price: float) -> str:
+    """List prices have up to 3 decimals: 0.25 -> '$0.25', 0.188 -> '$0.188'."""
+    text_price = f"{unit_price:.3f}"
+    return f"${text_price[:-1] if text_price.endswith('0') else text_price}"
+
+
+def _unsupplied_reason_code(catalog_item: Optional[str], plan_reason: Optional[str]) -> str:
+    """Why an item was not supplied, from the records where they say why."""
+    status = _current("item_status").get(catalog_item)
+    if catalog_item is None:
+        return "not_in_catalog"
+    if status == "NOT_STOCKED":
+        return "not_stocked"
+    if status in ("RESTOCK_NEEDED", "UNAVAILABLE"):
+        return "cannot_supply_in_time"
+    code = _current("rejected_lines").get(catalog_item) or plan_reason
+    return code if code in PLAN_REASONS else "not_available"
+
+
+def _unsupplied_reason(catalog_item: Optional[str], plan_reason: Optional[str]) -> str:
+    """Customer-facing sentence for why an item was not supplied."""
+    deliver_by = _long_date(_current("deliver_by"))
+    return {
+        "not_in_catalog": "this is not in our catalog",
+        "not_stocked": "we do not stock this item",
+        "cannot_supply_in_time": f"we cannot have enough in stock by your date of {deliver_by}",
+        "cannot_deliver_by_deadline": f"it cannot be delivered by your date of {deliver_by}",
+    }.get(_unsupplied_reason_code(catalog_item, plan_reason), "it is not available for this order")
+
+
+def _requested_label(requested: str, quantity: int) -> str:
+    """The customer's wording plus the quantity, unless the wording already states it."""
+    if re.search(rf"\b(?:{quantity}|{quantity:,})\b", requested):
+        return requested
+    return f"{requested} ({quantity:,} requested)"
+
+
+def render_customer_reply(plan: Optional[Dict[str, Any]]) -> str:
+    """Write the customer reply from the recorded sales and the Orchestrator's plan.
+
+    Prices, the discount rationale, the total and delivery dates always come
+    from the request records, so the reply can never state a figure that
+    differs from the database. The plan adds the customer's own wording, the
+    items we could not supply and a short personal note. With no valid plan
+    (e.g. the Orchestrator ran out of steps), the reply is built from the
+    records alone.
+    """
+    sold, quotes = _current("sold_lines"), _current("quote_lines")
+    rows = plan["items"] if plan else []
+    requested_as = {(row["catalog_item"], int(row["quantity"])): row["requested"] for row in rows}
+
+    note = str(plan["note"]).strip() if plan else ""
+    # The note often thanks the customer already; avoid "Thank you ... Thank you".
+    opening = note if note.lower().startswith("thank") else f"Thank you for your request. {note}".strip()
+    lines = [opening]
+
+    if sold:
+        lines += ["", "Your confirmed order:"]
+        rate = _current("discount_rate")
+        for (item, quantity), line in sold.items():
+            asked = requested_as.get((item, quantity), item)
+            asked_text = f' (you asked for "{asked}")' if asked.strip().lower() != item.lower() else ""
+            quote = quotes.get(item)
+            price_text = f" at {_unit_price_text(quote['unit_price'])} each" if quote else ""
+            discount_text = f", less {rate:.0%} bulk discount" if quote and rate > 0 else ""
+            lines.append(f"- {item}{asked_text}: {quantity:,} units{price_text}{discount_text} = "
+                         f"${line['line_total']:,.2f}, delivered by {_long_date(line['delivery'])}")
+        if _current("quote_rationale"):
+            lines.append(f"Discount: {_current('quote_rationale')}")
+        lines.append(f"Total charged: ${sum(line['line_total'] for line in sold.values()):,.2f}.")
+
+    if plan:
+        unsupplied = [f"- {_requested_label(str(row['requested']), _as_int(row['quantity'], 'quantity'))}: "
+                      f"{_unsupplied_reason(row['catalog_item'], row['reason'])}."
+                      for row in rows if row["outcome"] != "SOLD"]
+    else:
+        sold_items = {item for item, _ in sold}
+        unsupplied = [f"- {item}: {_unsupplied_reason(item, None)}."
+                      for item in _current("item_status") if item not in sold_items]
+        unsupplied.append("- Any other items in your request: these are not in our catalog.")
+    if unsupplied:
+        lines += ["", "We could not supply:"] + unsupplied
+
     if not sold:
-        if not re.search(r"\b(not|no|nothing)\b.{0,40}charg", reply, re.IGNORECASE):
-            _reject_reply("No sale was recorded, so nothing was charged. Rewrite the reply without any "
-                             "charge or total, and tell the customer that nothing has been charged.")
-        return True
-
-    total = round(sum(line["line_total"] for line in sold.values()), 2)
-    facts = "; ".join(f"{item} x{quantity:,}: ${line['line_total']:,.2f}, delivery {line['delivery']}"
-                      for (item, quantity), line in sold.items())
-    if f"{total:,.2f}" not in reply and f"{total:.2f}" not in reply:
-        _reject_reply(f"The reply must state the total actually charged: ${total:,.2f}. "
-                         f"Recorded sales: {facts}. Only these lines were sold; rewrite using exactly these figures.")
-    missing_dates = [line["delivery"] for line in sold.values() if not _mentions_date(reply, line["delivery"])]
-    if missing_dates:
-        _reject_reply(f"The reply must give the delivery date for each sold item. Recorded sales: {facts}.")
-    return True
+        lines += ["", "We are sorry we could not help this time. Nothing has been charged."]
+    lines += ["", CUSTOMER_CLOSING]
+    return "\n".join(lines)
 
 
 # max_tool_threads=1 keeps tool calls sequential so database writes never race.
@@ -1493,9 +1881,10 @@ inventory_agent = WorkerAgent(
     model=model,
     name="inventory_agent",
     description=("Checks stock for exact catalog items and reorders from the supplier when needed. "
-                 "Give it the request date, deliver-by date and lines 'exact item name | quantity'. "
-                 "Returns AVAILABLE or UNAVAILABLE per item with a reason."),
+                 "Give it lines 'exact item name | quantity'. Returns JSON: "
+                 '{"items": [{item_name, quantity, status AVAILABLE/UNAVAILABLE, reason}]}.'),
     instructions=INVENTORY_INSTRUCTIONS,
+    final_answer_checks=[inventory_report_check],
     display_name="Inventory Agent",
     max_steps=15,
     max_tool_threads=1,
@@ -1507,11 +1896,12 @@ quoting_agent = WorkerAgent(
     model=model,
     name="quoting_agent",
     description=("Prices available items with bulk discounts using quote history. "
-                 "Give it lines 'exact item name | quantity' and the event type if known. "
-                 "Returns quote lines, discount, total and a customer-friendly rationale."),
+                 "Give it lines 'exact item name | quantity' and the event type if known. Returns JSON: "
+                 '{"lines": [{item_name, quantity, unit_price, line_total}], discount_rate, quote_total, rationale}.'),
     instructions=QUOTING_INSTRUCTIONS,
+    final_answer_checks=[quote_report_check],
     display_name="Quoting Agent",
-    max_steps=6,
+    max_steps=8,
     max_tool_threads=1,
     verbosity_level=AGENT_VERBOSITY,
 )
@@ -1521,9 +1911,11 @@ sales_agent = WorkerAgent(
     model=model,
     name="sales_agent",
     description=("Finalizes an order: checks each line can be delivered by the deadline and records the sale. "
-                 "Give it the request date, deliver-by date and lines 'exact item name | quantity | line total'. "
-                 "Returns SOLD or REJECTED per line with delivery date or reason."),
+                 "Give it lines 'exact item name | quantity | line_total'. Returns JSON: "
+                 '{"lines": [{item_name, quantity, status SOLD/REJECTED, line_total, delivery_date, reason}], '
+                 "total_charged}."),
     instructions=SALES_INSTRUCTIONS,
+    final_answer_checks=[sales_report_check],
     display_name="Sales Agent",
     max_steps=12,
     max_tool_threads=1,
@@ -1548,7 +1940,7 @@ orchestrator_agent = ToolCallingAgent(
     name="orchestrator_agent",
     description="Handles customer requests by delegating to the inventory, quoting and sales agents.",
     instructions=ORCHESTRATOR_INSTRUCTIONS,
-    final_answer_checks=[reply_matches_records],
+    final_answer_checks=[plan_matches_records],
     max_steps=12,
     max_tool_threads=1,
     verbosity_level=AGENT_VERBOSITY,
@@ -1565,11 +1957,44 @@ CUSTOMER_FALLBACK_REPLY = (
 )
 
 
+# Every item a customer asked for that was not sold, across the run: structured
+# evidence for the Business Advisor's range and stock recommendations.
+_lost_demand: List[Dict[str, Any]] = []
+
+
 def reset_business_advisor_report() -> None:
-    """Start a fresh advisor report for a new test run."""
+    """Start a fresh advisor report and lost-demand log for a new test run."""
+    _lost_demand.clear()
     # utf-8-sig writes a BOM once at the start so Windows tools detect UTF-8.
     with open(ADVISOR_REPORT_PATH, "w", encoding="utf-8-sig") as report_file:
         report_file.write(f"Business Advisor report - run started {datetime.now():%Y-%m-%d %H:%M}\n\n")
+
+
+def _record_lost_demand(plan: Optional[Dict[str, Any]], request_date: str) -> List[Dict[str, Any]]:
+    """Log this request's unsold items (with reason codes) and return them."""
+    if plan:
+        unsold = [(str(row["requested"]), row["catalog_item"], int(row["quantity"]), row["reason"])
+                  for row in plan["items"] if row["outcome"] != "SOLD"]
+    else:
+        sold_items = {item for item, _ in _current("sold_lines")}
+        unsold = [(item, item, None, None) for item in _current("item_status") if item not in sold_items]
+    lost = [{"request_date": request_date, "requested": requested, "catalog_item": catalog_item,
+             "units": quantity, "reason": _unsupplied_reason_code(catalog_item, reason)}
+            for requested, catalog_item, quantity, reason in unsold]
+    _lost_demand.extend(lost)
+    return lost
+
+
+def lost_demand_summary() -> List[Dict[str, Any]]:
+    """Lost demand grouped by item and reason, most units first."""
+    totals: Dict[tuple, Dict[str, Any]] = {}
+    for line in _lost_demand:
+        item = line["catalog_item"] or line["requested"]
+        entry = totals.setdefault((item, line["reason"]),
+                                  {"item": item, "reason": line["reason"], "requests": 0, "units": 0})
+        entry["requests"] += 1
+        entry["units"] += line["units"] or 0
+    return sorted(totals.values(), key=lambda entry: (-entry["units"], entry["item"]))
 
 
 def _run_business_review(context: str, review_date: str, heading: str) -> None:
@@ -1585,6 +2010,19 @@ def _run_business_review(context: str, review_date: str, heading: str) -> None:
         report_file.write(f"=== {heading} ===\n{notes}\n\n")
 
 
+def _validated_plan(answer: Any) -> Optional[Dict[str, Any]]:
+    """The Orchestrator's plan if it is valid JSON that matches the records, else None.
+
+    Re-checked here because an agent that runs out of steps returns an
+    answer that never went through its final-answer check.
+    """
+    try:
+        plan = _parse_json_answer(answer)
+        return None if _plan_problem(plan) else plan
+    except ValueError:
+        return None
+
+
 def call_your_multi_agent_system(request_text: str) -> str:
     """Handle one customer request end to end and return the customer reply."""
     request_date = _extract_request_date(request_text)
@@ -1592,10 +2030,16 @@ def call_your_multi_agent_system(request_text: str) -> str:
     start_request_context(request_date, deliver_by)
     task = (f"Request date: {request_date}. Deliver-by date: {deliver_by}.\n\n"
             f"Customer request:\n{request_text}")
+    lost: List[Dict[str, Any]] = []
     with progress.track(f"Processing request dated {request_date}..."):
         progress.event("Customer", f"request received (deliver by {deliver_by})", "handoff")
         try:
-            reply = str(orchestrator_agent.run(task))
+            plan = _validated_plan(orchestrator_agent.run(task))
+            if plan is None:
+                progress.event("Orchestrator", "no valid plan - reply built from the records alone", "fail")
+            # Final safety net: no stock counts or unperformed services reach the customer.
+            reply = sanitize_customer_reply(render_customer_reply(plan))
+            lost = _record_lost_demand(plan, request_date)
             progress.event("Orchestrator", "reply sent to customer", "ok")
         except Exception as exc:
             # Never show internal errors to the customer.
@@ -1603,7 +2047,8 @@ def call_your_multi_agent_system(request_text: str) -> str:
             reply = CUSTOMER_FALLBACK_REPLY
         if ADVISOR_REVIEW_EVERY_REQUEST:
             _run_business_review(
-                f"Customer request:\n{request_text}\n\nReply sent to the customer:\n{reply}",
+                f"Customer request:\n{request_text}\n\nReply sent to the customer:\n{reply}\n\n"
+                f"Lost demand in this request (structured):\n{_to_json(lost)}",
                 request_date,
                 f"Request dated {request_date}",
             )
@@ -1611,11 +2056,15 @@ def call_your_multi_agent_system(request_text: str) -> str:
 
 
 def run_final_business_review(start_date: str, end_date: str) -> None:
-    """End-of-run review of all requests by the Business Advisor."""
+    """End-of-run review of all requests by the Business Advisor, with the lost-demand log."""
+    summary = json.dumps(lost_demand_summary(), indent=2)
+    with open(ADVISOR_REPORT_PATH, "a", encoding="utf-8") as report_file:
+        report_file.write(f"=== Lost demand log {start_date} to {end_date} (by item and reason) ===\n{summary}\n\n")
     with progress.track("Business Advisor: end-of-run review..."):
         _run_business_review(
             f"End-of-run review covering {start_date} to {end_date}. Use before_date = {start_date} "
-            f"and after_date = {end_date} for cash_trend_tool.",
+            f"and after_date = {end_date} for cash_trend_tool.\n\n"
+            f"Lost demand across all requests (structured, by item and reason):\n{summary}",
             end_date,
             f"End-of-run review {start_date} to {end_date}",
         )
